@@ -795,6 +795,40 @@
             </iframe>
     </div>
     <div id="arduino_IDE_code"> </div>
+    <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      fetch('http://127.0.0.1:5005/ports')
+        .then(response => response.json())
+        .then(ports => {
+          const select = document.getElementById('serialport_ide');
+          select.innerHTML = '';
+          if (ports.length === 0) {
+            const option = document.createElement('option');
+            option.value = 'no_com';
+            option.textContent = 'Aucun port détecté';
+            select.appendChild(option);
+            select.disabled = true;
+          } else {
+            ports.forEach(port => {
+              const option = document.createElement('option');
+              option.value = port;
+              option.textContent = port;
+              select.appendChild(option);
+            });
+            select.disabled = false;
+          }
+        })
+        .catch(err => {
+          const select = document.getElementById('serialport_ide');
+          select.innerHTML = '';
+          const option = document.createElement('option');
+          option.value = 'no_com';
+          option.textContent = 'Erreur de détection des ports';
+          select.appendChild(option);
+          select.disabled = true;
+        });
+    });
+    </script>
 </body>
 
 </html>

@@ -229,3 +229,69 @@ BlocklyDuino.workspace_capture = function() {
         a.click();
     }
 };
+
+// Compile (verify) button handler
+BlocklyDuino.verify_local_Click = function() {
+    console.log("Verify button clicked");
+    var board = "board=" + profile.defaultBoard['upload_arg'];
+    var url = "http://127.0.0.1:5005/set_board";
+    var method = "POST";
+    var async = true;
+    var request = new XMLHttpRequest();
+    request.open(method, url, async);
+    request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    request.onreadystatechange = function() {
+        if (request.readyState == 4 && request.status == 200) {
+            alert(request.responseText);
+        }
+    }
+    request.send(board);
+    setTimeout(function() {
+        var code = $('#pre_arduino').text();
+        url = "http://127.0.0.1:5005/compile";
+        request.open(method, url, async);
+        request.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
+        request.onreadystatechange = function() {
+            if (request.readyState == 4) {
+                alert(request.responseText);
+            }
+        }
+        request.send(code);
+    }, 1000);
+};
+
+// Upload button handler
+BlocklyDuino.uploadClick = function() {
+    console.log("Upload button clicked");
+    var board = "board=" + profile.defaultBoard['upload_arg'];
+    var url = "http://127.0.0.1:5005/set_board";
+    var method = "POST";
+    var async = true;
+    var request = new XMLHttpRequest();
+    request.open(method, url, async);
+    request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    request.onreadystatechange = function() {
+        if (request.readyState == 4 && request.status == 200) {
+            alert(request.responseText);
+        }
+    }
+    request.send(board);
+    setTimeout(function() {
+        var code = $('#pre_arduino').text();
+        url = "http://127.0.0.1:5005/upload";
+        request.open(method, url, async);
+        request.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
+        request.onreadystatechange = function() {
+            if (request.readyState == 4) {
+                alert(request.responseText);
+            }
+        }
+        request.send(code);
+    }, 1000);
+};
+
+// Bind the handlers to the buttons
+$(document).ready(function() {
+    $('#btn_verify_local').on('click', BlocklyDuino.verify_local_Click);
+    $('#btn_flash_local').on('click', BlocklyDuino.uploadClick);
+});
