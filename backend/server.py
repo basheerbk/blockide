@@ -7,13 +7,12 @@ import subprocess
 
 app = Flask(__name__)
 # Configure CORS to allow all origins for local development
-CORS(app, resources={
-    r"/*": {
-        "origins": ["http://localhost:*", "http://127.0.0.1:*", "file://*"],
-        "methods": ["GET", "POST", "OPTIONS"],
-        "allow_headers": ["Content-Type", "X-Serial-Port"]
-    }
-})
+CORS(app, origins=[
+    "http://localhost:5005",
+    "http://127.0.0.1:5005",
+    "file://",
+    "https://basheerbk.github.io"
+], supports_credentials=True)
 
 selected_board = "arduino:avr:uno"
 
