@@ -1,4 +1,4 @@
-<HTML>
+<html>
 
 <head>
     <link rel="icon" type="image/png" href="favicon.png" />
@@ -18,19 +18,13 @@
     <script type="text/javascript" src="generators/generator_arduino.js"></script>
     <script type="text/javascript" src="generators/generator_python.js"></script>
 
-    <script type="text/javascript" src="core/BlocklyArduino/blockly@rduino_core_Electron.js"></script>
+    <script type="text/javascript" src="core/BlocklyArduino/blockly@rduino_core_web.js"></script>
     <script type="text/javascript" src="core/BlocklyArduino/blockly@rduino_boards.js"></script>
-    <script type="text/javascript" src="core/BlocklyArduino/blockly@rduino_functions_buttons_Electron.js"></script>
+    <script type="text/javascript" src="core/BlocklyArduino/blockly@rduino_functions_buttons_web.js"></script>
     <script type="text/javascript" src="core/BlocklyArduino/blockly@rduino_tools.js"></script>
     <script type="text/javascript" src="core/BlocklyArduino/blockly@rduino_visual.js"></script>
     <script type="text/javascript" src="core/BlocklyArduino/blockly@rduino_visual_buttons.js"></script>
 
-    <script>
-        if (typeof module === 'object') {
-            window.module = module;
-            module = undefined;
-        }
-    </script>
     <script type="text/javascript" src="core/libs/jquery-2.1.3.min.js"></script>
     <script type="text/javascript" src="core/libs/jquery-ui.js"></script>
     <script type="text/javascript" src="core/libs/bootstrap.min.3.3.6.js"></script>
@@ -41,9 +35,7 @@
     <script type="text/javascript" src="core/libs/canvas2image.js"></script>
     <script type="text/javascript" src="core/libs/prettify.min.js"></script>
     <script type="text/javascript" src="core/libs/smoothie.js"></script>
-    <script>
-        if (window.module) module = window.module;
-    </script>
+
     <!-- define all additional blocks from one resumer-->
     <script type="text/javascript" src="blocks/arduino_resume.js"></script>
     <script type="text/javascript" src="generators/arduino_resume.js"></script>
@@ -72,7 +64,7 @@
     <div class="loading"></div>
     <div id="header">
         <div id="logo_Titre">
-            <a href="./index_electron.html">
+            <a href="./index.html">
                 <img id="clearLink" src="media/BlocklyArduino/logo.png" border="0" height="36" onclick="" />
             </a>
         </div>
@@ -212,6 +204,31 @@
                     <a href="#" id="toolbox_arduino_all" class="btn btn-level btn-default" role='button'>TOUT</a>
                     <label id="labelToolboxDefinition"></label>
                 </div>
+                <div id="barre">
+                    <button id="btn_edit_code" class="btn btn-arduinoRect" data-toggle="modal" data-target="#editModal">
+                            <span id="icon_edit_btn" class="glyphicon glyphicon-edit"> </span>
+                        </button>
+                    <button id="btn_saveArduino" class="btn btn-arduinoRect">
+                            <span class="fas fa-file-download fa-1_5x fa-fw"> </span>
+                        </button>
+                    <button id="btn_verify_local" class="btn btn-arduino" disabled="">
+                            <span class="fas fa-check fa-1_5x fa-fw"> </span>
+                        </button>
+                    <select id="serialport_ide" disabled="">
+                            <option value="no_com" selected="">Choisir le port</option>
+                        </select>
+                    <button id="btn_flash_local" class="btn btn-arduino" disabled="">
+                            <span class="fas fa-arrow-right fa-1_5x fa-fw"> </span>
+                        </button>
+                    <button id="btn_term" class="btn btn-arduinoRect" disabled="">
+                            <span class="fas fa-search fa-flip-horizontal fa-1_5x fa-fw"> </span>
+                        </button>
+                    <!-- <button id="btn_pasteIDEArduino" class="btn btn-arduino"> -->
+                    <!-- <span class="fa fa-folder-open"> </span> -->
+                    <!-- <span id="span_pasteIDEArduino"> </span> -->
+                    <!-- </button> -->
+                    <span id="survol" style="color:white"></span>
+                </div>
             </div>
             <div id="divTitreMenu_miniCard">
                 <a href="#" id="miniCard_Menu">
@@ -219,36 +236,7 @@
                 </a>
             </div>
         </div>
-        <div id="header_code">
-            <div id="barre_ide">
-                <button id="btn_edit_code" class="btn btn-arduinoRect" data-toggle="modal" data-target="#editModal"></button>
-                <button id="btn_saveArduino" class="btn btn-arduinoRect"></button>
-                <button id="btn_verify_local" class="btn btn-arduino">&#10003;</button>
-                <select id="serialport_ide" class="synchCOMport"></select>
-                <button id="btn_flash_local" class="btn btn-arduino">&#8594;</button>
-                <button id="btn_term" class="btn btn-arduinoRect"></button>
-                <span id="survol" style="color:white"></span>
-            </div>
-        </div>
-        <div id="header_supervision">
-            <div id="barre_supervision">
-                <select id="serialport_sup" class="synchCOMport">
-						<option value="no_com" selected>Choisir le port</option>
-					</select>
-                <span id="span_pymata_upload_text" style="color:white"></span>
-                <button id="btn_flash_pymata" class="btn btn-arduino">
-						<span class="fas fa-arrow-right fa-1_5x fa-fw"> </span>
-                        <span id="span_flash_pymata"> </span>
-					</button>
-                <span id="span_pymata_toggle_text" style="color:white"></span>
-                <button id="toggle-pymata" class="btn btn-arduino">
-						<span class="fas fa-arrow-right fa-1_5x fa-fw"> </span>
-                        <span id="span_flash_pymata"> </span>
-					</button>
-                <!-- <input id="toggle-pymata" data-toggle="toggle" data-off="<span id='span_pymataOFF'> </span>" data-on="<span id='span_pymataON'> </span>" data-onstyle="primary" data-offstyle="default" data-width="120" type="checkbox"/> -->
-                <span id="sup_debug" style="color:white"></span>
-            </div>
-        </div>
+
         <div id="tools_blocks" class="tab-pane active">
             <button id="btn_undo" class="btn btn-default">
                     <span class="fa fa-undo"> </span>
@@ -371,7 +359,7 @@
                 <button id="btn_miniMenuPanel" class="btn btn-sm btn-default">
                         <span class="glyphicon glyphicon-step-backward"> </span>
                     </button>
-                <a href="./index_electron.html" id="btn_reset" class="btn btn-sm btn-danger">
+                <a href="./index.html" id="btn_reset" class="btn btn-sm btn-danger">
                     <span class="glyphicon glyphicon-off"> </span>
                 </a>
                 <br />
@@ -563,14 +551,14 @@
     </div>
     <!-- show wiring of example "modal" -->
     <div id="wiringModal" class="modal-dialog" style="display:none;width: 100%;">
-        <div id="pictureModalLabel_boutons">
-            <button id="btn_wiring_mini" class="btn btn-default">
-                    <span id="icon_btn_blocs_picture_mini" class="glyphicon glyphicon-minus"> </span>
-                </button>
-            <button id="btn_wiring_maxi" class="btn btn-default">
-                    <span id="icon_btn_blocs_picture_maxi" class="glyphicon glyphicon-plus"> </span>
-                </button>
-        </div>
+        <!-- <div id="pictureModalLabel_boutons"> -->
+        <!-- <button id="btn_wiring_mini" class="btn btn-default"> -->
+        <!-- <span id="icon_btn_blocs_picture_mini" class="glyphicon glyphicon-minus"> </span> -->
+        <!-- </button> -->
+        <!-- <button id="btn_wiring_maxi" class="btn btn-default"> -->
+        <!-- <span id="icon_btn_blocs_picture_maxi" class="glyphicon glyphicon-plus"> </span> -->
+        <!-- </button> -->
+        <!-- </div> -->
         <div id="wiringModal_picture" class="modal-dialog" style="width: 100%;">
         </div>
     </div>
@@ -695,11 +683,6 @@
                                         <option value="dagu_rs027">Dagu RS027</option>
                                         <option value="dagu_rs040">Dagu RS040</option>
                                     </optgroup>
-                                    <optgroup label="Makeblok">
-                                        <option value="makeblock_mcore">mBot/mCore</option>
-                                        <option value="makeblock_megaPi">MegaPi</option>
-                                        <option value="makeblock_orion">Orion</option>
-                                    </optgroup>
                                     <optgroup label="DFRobot">
                                         <option value="dfrobot_romeo">DFRobot RoMeo v2</option>
                                         <option value="dfrobot_romeo_ble">DFRobot RoMeo BLE</option>
@@ -707,6 +690,15 @@
                                     <optgroup label="ESP">
                                         <option value="esp8266">ESP8266</option>
                                         <option value="esp32">ESP32</option>
+                                    </optgroup>
+                                    <optgroup label="Franzininho">
+                                        <option value="franzininho_DIY">Franzininho DIY</option>
+                                        <option value="franzininho_wifi">Franzininho WiFi</option>
+                                    </optgroup>
+                                    <optgroup label="Makeblok">
+                                        <option value="makeblock_mcore">mBot/mCore</option>
+                                        <option value="makeblock_megaPi">MegaPi</option>
+                                        <option value="makeblock_orion">Orion</option>
                                     </optgroup>
                                     <optgroup label="Otto">
                                         <option value="kit_otto_diy">Otto DIY</option>
@@ -774,12 +766,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <div id="btn_saveConfigGlobale_id">
-                        <button id="btn_saveConfigGlobale" type="button" class="btn btn-success" style="position: absolute;left: 15px;"></button>
-                    </div>
-                    <div id="btn_validConfigGlobale_id">
-                        <button id="btn_validConfigGlobale" type="button" class="btn btn-primary" data-dismiss="modal"></button>
-                    </div>
+                    <button id="btn_validConfigGlobale" type="button" class="btn btn-primary" data-dismiss="modal"></button>
                 </div>
             </div>
         </div>
@@ -802,16 +789,6 @@
             </div>
         </div>
     </div>
-    <!-- message modal -->
-    <div class="modal fade" id="message" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div id="messageDIV"> </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <!--only for IDE mode -->
     <div id="wiring_dialog">
         <iframe frameborder="0" marginwidth="0" marginheight="0">
@@ -819,56 +796,39 @@
     </div>
     <div id="arduino_IDE_code"> </div>
     <script>
-    // Robust error handling for missing dependencies and profile
-    $(document).ready(function() {
-        if (typeof $ === 'undefined') {
-            alert('jQuery is not loaded. Please check your script includes.');
-        }
-        if (typeof profile === 'undefined' || !profile.defaultBoard || !profile.defaultBoard['upload_arg']) {
-            console.warn('Board profile is not defined. Please select a board.');
-        }
-        // Ensure button handlers are bound
-        $('#btn_verify_local').off('click').on('click', BlocklyDuino.verify_local_Click);
-        $('#btn_flash_local').off('click').on('click', BlocklyDuino.uploadClick);
-    });
-    </script>
-    <script>
     window.addEventListener('DOMContentLoaded', function() {
-        function updateSerialPorts() {
-            fetch('http://127.0.0.1:5005/ports')
-                .then(response => response.json())
-                .then(ports => {
-                    const select = document.getElementById('serialport_ide');
-                    select.innerHTML = '';
-                    if (ports.length === 0) {
-                        const option = document.createElement('option');
-                        option.value = 'no_com';
-                        option.textContent = 'Aucun port détecté';
-                        select.appendChild(option);
-                        select.disabled = true;
-                    } else {
-                        ports.forEach(port => {
-                            const option = document.createElement('option');
-                            option.value = port;
-                            option.textContent = port;
-                            select.appendChild(option);
-                        });
-                        select.disabled = false;
-                    }
-                })
-                .catch(err => {
-                    const select = document.getElementById('serialport_ide');
-                    select.innerHTML = '';
-                    const option = document.createElement('option');
-                    option.value = 'no_com';
-                    option.textContent = 'Erreur de détection des ports';
-                    select.appendChild(option);
-                    select.disabled = true;
-                });
-        }
-        updateSerialPorts();
-        setInterval(updateSerialPorts, 2000);
+      fetch('http://127.0.0.1:5005/ports')
+        .then(response => response.json())
+        .then(ports => {
+          const select = document.getElementById('serialport_ide');
+          select.innerHTML = '';
+          if (ports.length === 0) {
+            const option = document.createElement('option');
+            option.value = 'no_com';
+            option.textContent = 'Aucun port détecté';
+            select.appendChild(option);
+            select.disabled = true;
+          } else {
+            ports.forEach(port => {
+              const option = document.createElement('option');
+              option.value = port;
+              option.textContent = port;
+              select.appendChild(option);
+            });
+            select.disabled = false;
+          }
+        })
+        .catch(err => {
+          const select = document.getElementById('serialport_ide');
+          select.innerHTML = '';
+          const option = document.createElement('option');
+          option.value = 'no_com';
+          option.textContent = 'Erreur de détection des ports';
+          select.appendChild(option);
+          select.disabled = true;
+        });
     });
     </script>
 </body>
-</HTML>
+
+</html>
