@@ -837,38 +837,53 @@
     <script>
     window.addEventListener('DOMContentLoaded', function() {
         function updateSerialPorts() {
-            fetch('http://127.0.0.1:5005/ports')
-                .then(response => response.json())
-                .then(ports => {
-                    const select = document.getElementById('serialport_ide');
-                    select.innerHTML = '';
-                    if (ports.length === 0) {
-                        const option = document.createElement('option');
-                        option.value = 'no_com';
-                        option.textContent = 'Aucun port détecté';
-                        select.appendChild(option);
-                        select.disabled = true;
-                    } else {
-                        ports.forEach(port => {
-                            const option = document.createElement('option');
-                            option.value = port;
-                            option.textContent = port;
-                            select.appendChild(option);
-                        });
-                        select.disabled = false;
-                    }
-                })
-                .catch(err => {
-                    const select = document.getElementById('serialport_ide');
-                    select.innerHTML = '';
+            fetch('/ports', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(ports => {
+                const select = document.getElementById('serialport_ide');
+                select.innerHTML = '';
+                if (ports.length === 0) {
                     const option = document.createElement('option');
                     option.value = 'no_com';
-                    option.textContent = 'Erreur de détection des ports';
+                    option.textContent = 'No ports detected';
                     select.appendChild(option);
                     select.disabled = true;
-                });
+                } else {
+                    ports.forEach(port => {
+                        const option = document.createElement('option');
+                        option.value = port;
+                        option.textContent = port;
+                        select.appendChild(option);
+                    });
+                    select.disabled = false;
+                }
+            })
+            .catch(err => {
+                console.warn('Error fetching ports:', err);
+                const select = document.getElementById('serialport_ide');
+                select.innerHTML = '';
+                const option = document.createElement('option');
+                option.value = 'no_com';
+                option.textContent = 'Error: Backend server not running';
+                select.appendChild(option);
+                select.disabled = true;
+            });
         }
+
+        // Initial update
         updateSerialPorts();
+        
+        // Update every 2 seconds
         setInterval(updateSerialPorts, 2000);
     });
     </script>

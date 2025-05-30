@@ -1,11 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 import os
 import serial.tools.list_ports
 from flask_cors import CORS
 import tempfile
 import subprocess
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='.', static_url_path='')
 # Configure CORS to allow all origins for local development
 CORS(app, resources={
     r"/*": {
@@ -16,6 +16,10 @@ CORS(app, resources={
 })
 
 selected_board = "arduino:avr:uno"
+
+@app.route('/')
+def serve_index():
+    return send_from_directory('.', 'index.html')
 
 @app.route('/set_board', methods=['POST'])
 def set_board():
@@ -38,7 +42,7 @@ def compile_code():
         # Run arduino-cli compile
         try:
             result = subprocess.run([
-                "arduino-cli", "compile", "--fqbn", "arduino:avr:uno", tmpdirname
+                "arduino-cli", "compile", "--fqbn", selected_board, tmpdirname
             ], capture_output=True, text=True, timeout=60)
             if result.returncode == 0:
                 return jsonify({"success": True, "message": result.stdout})
@@ -61,7 +65,7 @@ def upload_code():
             f.write(code)
         # Compile first
         compile_result = subprocess.run([
-            "arduino-cli", "compile", "--fqbn", "arduino:avr:uno", tmpdirname
+            "arduino-cli", "compile", "--fqbn", selected_board, tmpdirname
         ], capture_output=True, text=True, timeout=60)
         print("[UPLOAD] Compile stdout:", compile_result.stdout)
         print("[UPLOAD] Compile stderr:", compile_result.stderr)
@@ -71,7 +75,7 @@ def upload_code():
         # Upload
         try:
             upload_result = subprocess.run([
-                "arduino-cli", "upload", "-p", port, "--fqbn", "arduino:avr:uno", tmpdirname
+                "arduino-cli", "upload", "-p", port, "--fqbn", selected_board, tmpdirname
             ], capture_output=True, text=True, timeout=60)
             print("[UPLOAD] Upload stdout:", upload_result.stdout)
             print("[UPLOAD] Upload stderr:", upload_result.stderr)
@@ -91,5 +95,6 @@ def list_ports():
     return jsonify(ports)
 
 if __name__ == '__main__':
-    print(app.url_map)
-    app.run(port=5005) 
+    print("Starting server at http://localhost:5005")
+    print("Open your browser and navigate to http://localhost:5005")
+    app.run(port=5005, debug=True) 
