@@ -835,9 +835,34 @@
     });
     </script>
     <script>
+    // Dynamically determine backend URL
+    function getBackendURL() {
+        // If running on localhost or 127.0.0.1, use relative path
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            return '';
+        }
+        // If running on GitHub Pages or any remote host, use local backend
+        // Use http for localhost backend (user must run backend locally)
+        return 'http://localhost:5005';
+    }
+    const BACKEND_URL = getBackendURL();
+
+    // Show a warning if backend is unreachable
+    function showBackendWarning() {
+        if (!document.getElementById('backend-warning')) {
+            const warning = document.createElement('div');
+            warning.id = 'backend-warning';
+            warning.style = 'background: #ffcccc; color: #900; padding: 10px; text-align: center; font-weight: bold;';
+            warning.innerHTML =
+                '⚠️ Backend server not reachable. Compile, upload, and serial features will not work. ' +
+                'Please make sure you are running <code>python server.py</code> on your local machine.';
+            document.body.insertBefore(warning, document.body.firstChild);
+        }
+    }
+
     window.addEventListener('DOMContentLoaded', function() {
         function updateSerialPorts() {
-            fetch('/ports', {
+            fetch(BACKEND_URL + '/ports', {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -867,6 +892,9 @@
                     });
                     select.disabled = false;
                 }
+                // Remove warning if backend is reachable
+                const warning = document.getElementById('backend-warning');
+                if (warning) warning.remove();
             })
             .catch(err => {
                 console.warn('Error fetching ports:', err);
@@ -877,12 +905,12 @@
                 option.textContent = 'Error: Backend server not running';
                 select.appendChild(option);
                 select.disabled = true;
+                showBackendWarning();
             });
         }
 
         // Initial update
         updateSerialPorts();
-        
         // Update every 2 seconds
         setInterval(updateSerialPorts, 2000);
     });
