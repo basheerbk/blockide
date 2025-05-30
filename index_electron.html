@@ -221,28 +221,12 @@
         </div>
         <div id="header_code">
             <div id="barre_ide">
-                <button id="btn_edit_code" class="btn btn-arduinoRect" data-toggle="modal" data-target="#editModal">
-						<span id="icon_edit_btn" class="glyphicon glyphicon-edit"> </span>
-					</button>
-                <button id="btn_saveArduino" class="btn btn-arduinoRect">
-						<span class="fas fa-file-download fa-1_5x fa-fw"> </span>
-					</button>
-                <button id="btn_verify_local" class="btn btn-arduino">
-						<span class="fas fa-check fa-1_5x fa-fw"> </span>
-					</button>
-                <select id="serialport_ide" class="synchCOMport">
-						<option value="no_com" selected="">Choisir le port</option>
-					</select>
-                <button id="btn_flash_local" class="btn btn-arduino">
-						<span class="fas fa-arrow-right fa-1_5x fa-fw"> </span>
-					</button>
-                <button id="btn_term" class="btn btn-arduinoRect">
-						<span class="fas fa-search fa-flip-horizontal fa-1_5x fa-fw"> </span>
-					</button>
-                <!-- <button id="btn_pasteIDEArduino" class="btn btn-arduino"> -->
-                <!-- <span class="fa fa-folder-open"> </span> -->
-                <!-- <span id="span_pasteIDEArduino"> </span> -->
-                <!-- </button> -->
+                <button id="btn_edit_code" class="btn btn-arduinoRect" data-toggle="modal" data-target="#editModal"></button>
+                <button id="btn_saveArduino" class="btn btn-arduinoRect"></button>
+                <button id="btn_verify_local" class="btn btn-arduino">&#10003;</button>
+                <select id="serialport_ide" class="synchCOMport"></select>
+                <button id="btn_flash_local" class="btn btn-arduino">&#8594;</button>
+                <button id="btn_term" class="btn btn-arduinoRect"></button>
                 <span id="survol" style="color:white"></span>
             </div>
         </div>
@@ -834,63 +818,57 @@
             </iframe>
     </div>
     <div id="arduino_IDE_code"> </div>
+    <script>
+    // Robust error handling for missing dependencies and profile
+    $(document).ready(function() {
+        if (typeof $ === 'undefined') {
+            alert('jQuery is not loaded. Please check your script includes.');
+        }
+        if (typeof profile === 'undefined' || !profile.defaultBoard || !profile.defaultBoard['upload_arg']) {
+            console.warn('Board profile is not defined. Please select a board.');
+        }
+        // Ensure button handlers are bound
+        $('#btn_verify_local').off('click').on('click', BlocklyDuino.verify_local_Click);
+        $('#btn_flash_local').off('click').on('click', BlocklyDuino.uploadClick);
+    });
+    </script>
+    <script>
+    window.addEventListener('DOMContentLoaded', function() {
+        function updateSerialPorts() {
+            fetch('http://127.0.0.1:5005/ports')
+                .then(response => response.json())
+                .then(ports => {
+                    const select = document.getElementById('serialport_ide');
+                    select.innerHTML = '';
+                    if (ports.length === 0) {
+                        const option = document.createElement('option');
+                        option.value = 'no_com';
+                        option.textContent = 'Aucun port détecté';
+                        select.appendChild(option);
+                        select.disabled = true;
+                    } else {
+                        ports.forEach(port => {
+                            const option = document.createElement('option');
+                            option.value = port;
+                            option.textContent = port;
+                            select.appendChild(option);
+                        });
+                        select.disabled = false;
+                    }
+                })
+                .catch(err => {
+                    const select = document.getElementById('serialport_ide');
+                    select.innerHTML = '';
+                    const option = document.createElement('option');
+                    option.value = 'no_com';
+                    option.textContent = 'Erreur de détection des ports';
+                    select.appendChild(option);
+                    select.disabled = true;
+                });
+        }
+        updateSerialPorts();
+        setInterval(updateSerialPorts, 2000);
+    });
+    </script>
 </body>
-<script>
-    require('../resources/app.asar/Electron_Blockly@rduino_buttons_electron.js')
-        <!-- require('../Electron_Blockly@rduino_buttons_electron.js'); -->
-</script>
-<script>
-window.addEventListener('DOMContentLoaded', function() {
-  // Function to update the serial port dropdown
-  function updateSerialPorts() {
-    fetch('http://127.0.0.1:5005/ports')
-      .then(response => response.json())
-      .then(ports => {
-        const select = document.getElementById('serialport_ide');
-        if (!select) {
-          console.error('Serial port dropdown not found');
-          return;
-        }
-        
-        // Clear existing options
-        select.innerHTML = '';
-        
-        if (ports.length === 0) {
-          const option = document.createElement('option');
-          option.value = 'no_com';
-          option.textContent = 'Aucun port détecté';
-          select.appendChild(option);
-          select.disabled = true;
-        } else {
-          ports.forEach(port => {
-            const option = document.createElement('option');
-            option.value = port;
-            option.textContent = port;
-            select.appendChild(option);
-          });
-          select.disabled = false;
-        }
-      })
-      .catch(err => {
-        console.error('Error fetching ports:', err);
-        const select = document.getElementById('serialport_ide');
-        if (select) {
-          select.innerHTML = '';
-          const option = document.createElement('option');
-          option.value = 'no_com';
-          option.textContent = 'Erreur de détection des ports';
-          select.appendChild(option);
-          select.disabled = true;
-        }
-      });
-  }
-
-  // Initial update
-  updateSerialPorts();
-
-  // Update every 2 seconds
-  setInterval(updateSerialPorts, 2000);
-});
-</script>
-
 </HTML>

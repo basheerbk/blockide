@@ -233,6 +233,10 @@ BlocklyDuino.workspace_capture = function() {
 // Compile (verify) button handler
 BlocklyDuino.verify_local_Click = function() {
     console.log("Verify button clicked");
+    if (typeof profile === 'undefined' || !profile.defaultBoard || !profile.defaultBoard['upload_arg']) {
+        alert("Board profile is not defined. Please select a board.");
+        return;
+    }
     var board = "board=" + profile.defaultBoard['upload_arg'];
     var url = "http://127.0.0.1:5005/set_board";
     var method = "POST";
@@ -263,6 +267,10 @@ BlocklyDuino.verify_local_Click = function() {
 // Upload button handler
 BlocklyDuino.uploadClick = function() {
     console.log("Upload button clicked");
+    if (typeof profile === 'undefined' || !profile.defaultBoard || !profile.defaultBoard['upload_arg']) {
+        alert("Board profile is not defined. Please select a board.");
+        return;
+    }
     var board = "board=" + profile.defaultBoard['upload_arg'];
     var url = "http://127.0.0.1:5005/set_board";
     var method = "POST";
@@ -278,14 +286,33 @@ BlocklyDuino.uploadClick = function() {
     request.send(board);
     setTimeout(function() {
         var code = $('#pre_arduino').text();
-        url = "http://127.0.0.1:5005/upload";
+        var port = document.getElementById('serialport_ide').value;
+        url = "http://127.0.0.1:5005/upload?port=" + encodeURIComponent(port);
         request.open(method, url, async);
         request.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
         request.onreadystatechange = function() {
             if (request.readyState == 4) {
-                alert(request.responseText);
+                try {
+                    var resp = JSON.parse(request.responseText);
+                    if (resp.success) {
+                        alert("Upload successful!\n" + resp.message);
+                    } else {
+                        alert("Upload failed!\n" + resp.message);
+                    }
+                } catch (e) {
+                    if (request.status === 0) {
+                        alert("Network error or backend not reachable.");
+                    } else if (request.status >= 400) {
+                        alert("Upload failed!\n" + request.responseText);
+                    } else {
+                        alert("Unexpected response: " + request.responseText);
+                    }
+                }
             }
         }
+        request.onerror = function() {
+            alert("Network error during upload request.");
+        };
         request.send(code);
     }, 1000);
 };
