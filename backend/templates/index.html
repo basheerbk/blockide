@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blockly@rduino Backend Server</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container py-5">
+    <h1 class="mb-4">Blockly@rduino Backend Server</h1>
+    <div class="alert alert-success">
+        <strong>Status:</strong> Server is running!
+    </div>
+    <h3>Available Serial Ports</h3>
+    <ul id="ports-list" class="list-group mb-4"></ul>
+    <button class="btn btn-primary" onclick="fetchPorts()">Refresh Ports</button>
+    <hr>
+    <p class="text-muted">You can now use the Blockly@rduino web interface with this backend.</p>
+</div>
+<script>
+function fetchPorts() {
+    fetch('/ports')
+        .then(res => res.json())
+        .then(ports => {
+            const ul = document.getElementById('ports-list');
+            ul.innerHTML = '';
+            if (ports.length === 0) {
+                ul.innerHTML = '<li class="list-group-item">No ports detected</li>';
+            } else {
+                ports.forEach(port => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item';
+                    li.textContent = port;
+                    ul.appendChild(li);
+                });
+            }
+        });
+}
+window.onload = fetchPorts;
+</script>
+</body>
+</html> 
