@@ -1,0 +1,800 @@
+/* Custom styles for dropdowns */
+select {
+    background-color: #990099 !important;
+    color: white !important;
+    border: 1px solid #990099 !important;
+    padding: 5px 10px !important;
+    border-radius: 4px !important;
+}
+
+select:hover {
+    background-color: #b300b3 !important;
+}
+
+select:focus {
+    outline: none !important;
+    box-shadow: 0 0 5px #990099 !important;
+}
+
+select option {
+    background-color: white !important;
+    color: #990099 !important;
+}
+
+select option:hover {
+    background-color: #f0f0f0 !important;
+}
+
+/* Style for the dropdown arrow */
+select {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 10px center !important;
+    background-size: 20px !important;
+    padding-right: 30px !important;
+}
+
+/* Hide the Blockly workspace grid for a plain background */
+.blocklyMainBackground {
+    fill: #fff !important;
+    fill-opacity: 1 !important;
+}
+.blocklyGridPattern {
+    display: none !important;
+}
+
+#mainContent {
+    position: absolute;
+    top: 48px; /* adjust if you have a header */
+    left: 0;
+    bottom: 0;
+    width: 75vw; /* 75% of the viewport width */
+    height: calc(100vh - 48px); /* adjust for header */
+    overflow: auto;
+}
+
+#sidePreview,
+#serialMonitor,
+.serial-controls,
+.serial-monitor,
+.serial-monitor-row,
+.serial-status-msg,
+.serial-output {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.serial-controls {
+  gap: 10px;
+}
+
+.serial-monitor {
+  margin-top: 10px !important;
+}
+
+.serial-status-msg {
+  margin-bottom: 4px !important;
+}
+
+/* Match serial output width to code preview */
+.serial-output {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  height: 120px;
+  min-height: 120px;
+  max-height: 120px;
+  overflow: auto;
+  background: #ffffff;
+  color: #ffffff;
+  padding: 6px 4px !important;
+  margin-top: 8px !important;
+  border-color: rgba(0, 0, 0, 0.589);
+  border-radius: 1px;
+  box-sizing: border-box;
+}
+
+#sidePreview {
+    position: absolute;
+    top: 48px; /* adjust for header */
+    right: 0;
+    bottom: 0;
+    width: 25vw; /* 25% of the viewport width */
+    height: calc(100vh - 48px);
+    background: #ffffff;
+   
+    box-shadow: -2px 0 8px rgba(153,0,153,0.08);
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+#pre_previewArduino {
+    flex: 1 1 auto;
+    width: 100%;
+    height: 80%;
+    margin: 0;
+    padding: 1em;
+    font-size: 1.1em;
+    background: #e5e5e5;
+    color: #6e6e6e;
+    overflow: auto;
+    border: none;
+    position: relative;
+}
+
+#btn_CopyCode {
+    flex: 0 0 auto;
+    margin: 1em;
+    top: 50px;
+    align-self: flex-end;
+    background: #fdfdfd !important;
+    color: #990099 !important;
+    border: 1px solid hsl(0, 0%, 100%) !important;
+    box-shadow: none !important;
+    font-weight: 600;
+    border-radius: 4px;
+    transition: background 0.2s, color 0.2s;
+}
+#btn_CopyCode:hover, #btn_CopyCode:focus {
+    background: #7c007e !important;
+    color: #ffffff !important;
+    border-color: #790071 !important;
+    outline: none !important;
+}
+
+#content_blocks {
+    position: relative;
+}
+
+#tools_blocks {
+    position: absolute;
+    top: 50px;
+    right: 25vw;
+    z-index: 1000;
+    background: rgba(255,255,255,0.85);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 6px 8px;
+    display: flex;
+    gap: 8px;
+}
+
+#tools_blocks .btn {
+    margin: 0;
+    box-shadow: none;
+}
+
+.serial-dropdown {
+    padding: 7px 1px;
+    border-radius: 6px;
+    border: 1px solid #990099;
+    font-size: 1em;
+    color: #ffffff;
+    height: 10px;
+    background: #990099;
+    min-width: 10px;
+    outline: none;
+    transition: border 0.2s, box-shadow 0.2s;
+    font-weight: 500;
+}
+
+.serial-dropdown:focus {
+    border-color: #ffffff;
+    box-shadow: 0 0 0 2px #e0b3e6;
+}
+
+#sideSerialControls {
+  position: absolute;
+  top: 3px;
+  right: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 6px 10px;
+  z-index: 1001;
+}
+
+#sideSerialControls select,
+#sideSerialControls button {
+  font-size: 0.85em;
+  padding: 3px 8px;
+  border: none;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+
+#sideSerialControls button {
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  font-weight: bold;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+
+#sideSerialControls button:hover {
+  background: rgba(255, 255, 255, 1);
+  color: #000;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+#sideSerialControls select {
+  color: #333 !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  font-weight: bold !important;
+  transition: background 0.2s, color 0.2s, border 0.2s !important;
+}
+
+#sideSerialControls select:hover,
+#sideSerialControls select:focus {
+  background: rgba(255, 255, 255, 1) !important;
+  color: #000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.3) !important;
+}
+
+#baudRateSelect,
+#serialExpandBaudRate {
+  border: 1.5px solid #990099 !important;
+  border-radius: 6px;
+  color: #990099;
+  height: 38px;
+  padding: 0 18px;
+  font-size: 1.1em;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+#baudRateSelect:focus, #baudRateSelect:hover {
+  background: #990099;
+  color: #fff;
+  border: 1px solid #990099 !important;
+}
+
+#side_btn_connect_monitor {
+  background: #fffefe !important;
+  color: 990099 !important;
+  border: 1px solid #990099 !important;
+  font-weight: bold !important;
+  border-radius: 6px !important;
+  padding-right: 10px;
+  transition: background 0.2s, color 0.2s, border 0.2s !important;
+}
+#side_btn_connect_monitor:hover, #side_btn_connect_monitor:focus {
+  background: #ffffff !important;
+  color: #990099 !important;
+  border: 1px solid #990099!important;
+}
+
+.serial-btn-connect {
+  height: 25px;
+  padding: 0 18px;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-radius: 6px;
+  background: #fff;
+  color: #990099;
+  border: 1.5px solid #990099;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  box-sizing: border-box;
+}
+.serial-btn-connect:hover, .serial-btn-connect:focus {
+  background: #dd0093 !important;
+  color: #fff !important;
+  border: 1px solid #882181 !important;
+}
+
+.serial-baudrate {
+  width: 60px;
+  color: #990099 !important;
+  border: 1px solid #990099 !important;
+  background: #fff !important;
+  font-weight: bold !important;
+  border-radius: 6px !important;
+  height: 32px !important;
+  padding: 0 8px !important;
+  transition: background 0.2s, color 0.2s, border 0.2s !important;
+  margin-left: 8px;
+  margin-right: 6px;
+}
+.serial-baudrate:hover, .serial-baudrate:focus {
+  background: #990099 !important;
+  color: #fff !important;
+  border: 1px solid #990099 !important;
+}
+
+.serial-input {
+  width: 100%;
+  flex: 0 0 100%;
+  min-width: 0;
+  max-width: 90%;
+  height: 32px;
+  border: 1px solid #990099;
+  background: #fff;
+  color: #990099;
+  font-weight: bold;
+  padding: 0 8px;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+
+.serial-btn-send {
+  width: 32px;
+  min-width: 32px;
+  padding: 0;
+  margin-left: 6px;
+  background: #fff !important;
+  color: #990099 !important;
+  border: 1px solid #990099 !important;
+  font-weight: bold !important;
+  border-radius: 6px !important;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s, border 0.2s !important;
+}
+.serial-btn-send:hover, .serial-btn-send:focus {
+  background: #990099 !important;
+  color: #fff !important;
+  border: 1px solid #990099 !important;
+}
+
+#side_btn_upload {
+  min-width: 60px;
+  width: 60px;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  background: #28a745 !important;
+  color: #fff !important;
+  border: 1px solid #28a745 !important;
+  font-weight: bold !important;
+  border-radius: 6px !important;
+  transition: background 0.2s, color 0.2s, border 0.2s !important;
+}
+#side_btn_upload:hover, #side_btn_upload:focus {
+  background: #ffffff;
+  color: #00ff2a;
+  border: 2px solid #28a745;
+}
+
+
+
+.serial-monitor-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  justify-content: center;
+}
+.serial-monitor-top {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  justify-content: center;
+}
+.serial-monitor-bottom {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  justify-content: center;
+  margin-top: 8px;
+}
+.serial-input {
+  display: inline-block;
+}
+.serial-btn-send {
+  display: inline-block;
+}
+
+#serialExpandBtn {
+  background: #fff !important;
+  color: #990099 !important;
+  
+  font-weight: bold !important;
+  border-radius: 6px !important;
+  height: 32px;
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s, border 0.2s !important;
+  margin-left: 6px;
+}
+#serialExpandBtn:hover, #serialExpandBtn:focus {
+  background: #990099 !important;
+  color: #fff !important;
+  border: 1px solid #990099 !important;
+}
+
+#serialExpandModal .modal-dialog {
+  width: 700px;
+  max-width: 90vw;
+  height: 500px;
+  max-height: 90vh;
+  margin: 30px auto;
+}
+#serialExpandModal .modal-content {
+  height: 100%;
+}
+@media (max-width: 800px) {
+  #serialExpandModal .modal-dialog {
+    width: 98vw;
+    height: 90vh;
+    margin: 10px auto;
+  }
+}
+
+#serialExpandOutput {
+  width: 100%;
+  height: 340px;
+  min-height: 200px;
+  max-height: 60vh;
+  overflow: auto;
+  background: #f7f5f5;
+  color: #000;
+  padding: 6px 4px !important;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin: 0;
+}
+@media (max-width: 800px) {
+  #serialExpandOutput {
+    height: 30vh;
+    max-height: 40vh;
+  }
+}
+
+#sideSerialControls select, #sideSerialControls button {
+    font-size: 0.95em;
+    padding: 1px 1px;
+    border: none;
+    border-radius: 6px;
+    background: white;
+    color: #8e24aa;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* === Moved from inline <style> in index.html === */
+#barre_ide {
+  /* Remove previous flex and style rules for #barre_ide */
+}
+#serial-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #8e24aa;
+  padding: 12px 24px;
+  border-radius: 8px;
+}
+#serial-controls select,
+#serial-controls button {
+  font-size: 0.95em;
+  padding: 4px 10px;
+  border: none;
+  border-radius: 6px;
+  background: white;
+  color: #8e24aa;
+  font-weight: bold;
+  cursor: pointer;
+}
+#serial-controls button {
+  background: #9c27b0;
+  color: white;
+  transition: background 0.2s;
+}
+#serial-controls button:hover {
+  background: #7b1fa2;
+}
+#sideSerialControls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  margin-bottom: 6px;
+}
+#sideSerialControls select,
+#sideSerialControls button {
+  font-size: 0.95em;
+  padding: 4px 10px;
+  border: none;
+  border-radius: 6px;
+  background: white;
+  color: #8e24aa;
+  font-weight: bold;
+  cursor: pointer;
+}
+#sideSerialControls button {
+  background: #fff;
+  color: #990099;
+  border: 2px solid #990099;
+  font-weight: bold;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+#sideSerialControls button:hover {
+  background: #990099;
+  color: #fff;
+  border: 2px solid #990099;
+}
+#sideSerialControls select {
+  color: #990099 !important;
+  border: 2px solid #990099 !important;
+  background: #fff !important;
+  font-weight: bold !important;
+  transition: background 0.2s, color 0.2s, border 0.2s !important;
+}
+#sideSerialControls select:hover,
+#sideSerialControls select:focus {
+  background: #990099 !important;
+  color: #fff !important;
+  border: 2px solid #990099 !important;
+}
+#sideExpandModal .modal-dialog {
+  max-width: 90vw;
+}
+#sideExpandModal .modal-body {
+  height: 60vh;
+  overflow: auto;
+  padding-top: 48px;
+}
+#sideExpandOutput {
+  width: 100%;
+  min-height: 400px;
+  max-height: 55vh;
+  font-size: 1.2em;
+  background: #f7f5f5;
+  color: #000;
+  border-radius: 4px;
+  padding: 12px;
+  box-sizing: border-box;
+}
+/* === End moved inline CSS === */
+
+/* Serial Tabs */
+.serial-tabs {
+  display: flex;
+  gap: 2px;
+  background: #f0f0f0;
+  padding: 4px 4px 0;
+  border-radius: 4px 4px 0 0;
+  margin-bottom: 0 !important;
+}
+
+.serial-tab-btn {
+  padding: 8px 16px;
+  border: none;
+  background: #e0e0e0;
+  color: #666;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px 4px 0 0;
+  transition: all 0.2s ease;
+}
+
+.serial-tab-btn:hover {
+  background: #d0d0d0;
+  color: #333;
+}
+
+.serial-tab-btn.active {
+  background: #990099;
+  color: white;
+}
+
+.messages-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #ffffff;
+  border-bottom: px solid #ffffff;
+}
+
+.messages-header h4 {
+  margin: 0;
+  color: #333;
+  font-size: 1em;
+}
+
+#clearMessages {
+  padding: 2px 8px;
+  font-size: 0.9em;
+  background: #f0f0f0;
+  border: 0px solid #ddd;
+  border-radius: 3px;
+  color: #666;
+}
+
+#clearMessages:hover {
+  background: #e0e0e0;
+  color: #333;
+}
+
+/* Ensure serial monitor and messages monitor have consistent styling */
+#serialMonitor,
+#messagesMonitor {
+  border: 0px solid #ffffff;
+  border-radius: 0 0 4px 4px;
+  margin-top: -1px;
+}
+
+/* Message types in the messages monitor */
+.message {
+  padding: 4px 8px;
+  margin: 2px 0;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.message.info {
+  color: #0066cc;
+  background: #e6f3ff;
+}
+
+.message.success {
+  color: #008800;
+  background: #e6ffe6;
+}
+
+.message.warning {
+  color: #cc6600;
+  background: #fff3e6;
+}
+
+.message.error {
+  color: #cc0000;
+  background: #ffe6e6;
+}
+
+/* Serial output area */
+#serialOutput {
+  background: #ffffff;
+  border: .1px solid #ababab;
+  color: #ffffff;
+  font-family: monospace;
+  font-size: 1em;
+  padding: 8px;
+  border-radius: 6px;
+  min-height: 120px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Messages output area */
+#messagesOutput {
+  background: #ffffff;
+  border: 1px solid #c30000;
+  color: #ffffff;
+  font-family: monospace;
+  font-size: 1em;
+  border-radius: 0 !important;
+  min-height: 0;
+  max-height: 350px;
+  overflow-y: auto;
+  margin: 0 !important;
+  padding: 0px;
+  border-width: 0 !important;
+}
+
+#messagesMonitor.serial-monitor {
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+#previewExpandBtn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  background: rgba(255,255,255,0.85);
+  border: 1px solid #990099;
+  border-radius: 6px;
+  color: #990099;
+  font-size: 1.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border 0.15s;
+}
+#previewExpandBtn:hover, #previewExpandBtn:focus {
+  background: #f3e6fa;
+  color: #7c007e;
+  border: 1.5px solid #7c007e;
+  outline: none;
+}
+
+#pre_previewArduino {
+  position: relative;
+}
+
+#previewExpandBtn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  background: rgba(255,255,255,0.85);
+  border: 1px solid #990099;
+  border-radius: 6px;
+  color: #990099;
+  font-size: 1.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border 0.15s;
+}
+#previewExpandBtn:hover, #previewExpandBtn:focus {
+  background: #f3e6fa;
+  color: #7c007e;
+  border: 1.5px solid #7c007e;
+  outline: none;
+}
+
+.arduino-preview-container {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-width: 180px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 38vw;
+  max-height: 480px;
+  min-height: 180px;
+  transition: height 0.2s;
+}
+
+#pre_previewArduino {
+  width: 100%;
+  height: 100%;
+  min-height: 140px;
+  max-height: 100%;
+  margin: 0;
+  padding: 1em;
+  font-size: 1.1em;
+  background: #e5e5e5;
+  color: #6e6e6e;
+  overflow: auto;
+  border: none;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  .arduino-preview-container {
+    height: 54vw;
+    min-height: 120px;
+    max-height: 260px;
+  }
+  #pre_previewArduino {
+    font-size: 1em;
+    padding: 0.5em;
+  }
+}
+
+.hidden-section {
+  display: none !important;
+} 

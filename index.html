@@ -62,19 +62,50 @@
     <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
     <link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
     <link rel="stylesheet" type="text/css" href="css/prettify.css" />
+    <link rel="stylesheet" href="css/custom.css">
 
     <script type="text/javascript">
         $(window).load(function() {
             $(".loading").fadeOut("slow");
         });
     </script>
+    <script>
+        function maximizePage() {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+                document.documentElement.webkitRequestFullscreen();
+            } else if (document.documentElement.msRequestFullscreen) {
+                document.documentElement.msRequestFullscreen();
+            }
+            
+            // Maximize the window if possible
+            if (window.screen && window.screen.availWidth) {
+                window.moveTo(0, 0);
+                window.resizeTo(window.screen.availWidth, window.screen.availHeight);
+            }
+        }
+    </script>
+    <!-- Add Bootstrap Icons CDN if not already present -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 
-<body onload="BlocklyDuino.init()">
+<body onload="BlocklyDuino.init(); maximizePage();">
+    <script>
+    window.addMessage = function(message, type = 'info') {
+        var messagesOutput = document.getElementById('messagesOutput');
+        if (!messagesOutput) return;
+        var messageElement = document.createElement('div');
+        messageElement.className = `message ${type}`;
+        messageElement.textContent = message;
+        messagesOutput.appendChild(messageElement);
+        messagesOutput.scrollTop = messagesOutput.scrollHeight;
+    };
+    </script>
     <div class="loading"></div>
     <div id="header">
         <div id="logo_Titre">
-            <a href="./index_electron.html">
+            <a href="./index.html">
                 <img id="clearLink" src="media/BlocklyArduino/logo.png" border="0" height="36" onclick="" />
             </a>
         </div>
@@ -109,14 +140,8 @@
                                 </ul>
                             </li>
                             <li>
-                                <a><i class="fa fa-briefcase"></i> <span id="span_menu_2"> </span> <i class="fa fa-caret-down"></i></a>
+                                <a><i class="fa fa-briefcase"></i> MODES <i class="fa fa-caret-down"></i></a>
                                 <ul class="submenu">
-                                    <li>
-                                        <a href='http://fritzing.org/download/' target='_blank' id="menu_21"> <span id="span_menu_21"> </span> </a>
-                                    </li>
-                                    <li id="mtab_supervision">
-                                        <a href="https://github.com/technologiescollege/BlocklyArduino_AIO" target="_blank" id="menu_22"> <span id="span_menu_22"> </span> </a>
-                                    </li>
                                     <li id="mtab_blocks">
                                         <a href="#content_blocks" aria-controls="content_blocks" role="tab" data-toggle="tab" id="menu_23"> <span id="span_menu_23"> </span> </a>
                                     </li>
@@ -204,7 +229,7 @@
                     </nav>
                 </div>
             </div>
-            <div id="divTitre">
+            <!--div id="divTitre">
                 <div id="btn_levels">
                     <a href="#" id="toolbox_algo" class="btn btn-level btn-default" role='button'>0</a>
                     <a href="#" id="toolbox_arduino_1" class="btn btn-level btn-default" role='button'>1</a>
@@ -214,14 +239,20 @@
                     <a href="#" id="toolbox_arduino_all" class="btn btn-level btn-default" role='button'>TOUT</a>
                     <label id="labelToolboxDefinition"></label>
                 </div>
-            </div>
+            </div> -->
             <div id="divTitreMenu_miniCard">
                 <a href="#" id="miniCard_Menu">
                     <img id="arduino_card_miniPicture_Menu" height="36" border="0" />
                 </a>
             </div>
         </div>
-        <div id="header_code">
+        <div id="sideSerialControls" class="serial-controls">
+            <select id="side_serialport" class="serial-dropdown">
+                <option value="">Select Port</option>
+            </select>
+            <button id="side_btn_upload" class="btn btn-success">Upload</button>
+        </div>
+        <div id="header_code" class="hidden-section">
             <div id="barre_ide">
                 <button id="btn_edit_code" class="btn btn-arduinoRect" data-toggle="modal" data-target="#editModal"></button>
                 <button id="btn_saveArduino" class="btn btn-arduinoRect"></button>
@@ -232,10 +263,10 @@
                 <span id="survol" style="color:white"></span>
             </div>
         </div>
-        <div id="header_supervision">
+        <div id="header_supervision" class="hidden-section">
             <div id="barre_supervision">
                 <select id="serialport_sup" class="synchCOMport">
-						<option value="no_com" selected>Choisir le port</option>
+						<option value="no_com" selected>port</option>
 					</select>
                 <span id="span_pymata_upload_text" style="color:white"></span>
                 <button id="btn_flash_pymata" class="btn btn-arduino">
@@ -260,34 +291,10 @@
                 </button>
             <button id="btn_block_capture" class="btn btn-default">
                     <span id="icon_btn_block_capture" class="glyphicon glyphicon-camera"> </span>
-                </button>
-            <button id="btn_blocs_picture_mini" class="btn btn-default">
-                    <span id="icon_btn_blocs_picture_mini" class="glyphicon glyphicon-zoom-out"> </span>
-                </button>
-            <button id="btn_blocs_picture_maxi" class="btn btn-default">
-                    <span id="icon_btn_blocs_picture_maxi" class="glyphicon glyphicon-zoom-in"> </span>
-                </button>
-            <button id="btn_blocs_picture" class="btn btn-default">
-                    <span id="icon_btn_blocs_picture" class="glyphicon glyphicon-eye-open"> </span>
-                </button>
-            <button id="btn_preview" class="btn btn-default">
-                    <span id="icon_btn_preview" class="glyphicon glyphicon-sunglasses"> </span>
-                </button>
-            <button id="btn_inline" class="btn btn-default">
-                    <span id="icon_btn_inline" class="glyphicon glyphicon-option-vertical"> </span>
-                </button>
-            <button id="btn_size" class="btn btn-default">
-                    <span id="icon_btn_size" class="glyphicon"> </span>
-                </button>
-            <div id="toggle_code" class="modal-content" style="display: none;">
-                <pre id="pre_previewArduino" title="Code"></pre>
-                <button id="btn_CopyCode" class="btn btn-warning" data-clipboard-action="copy" data-clipboard-target="#pre_previewArduino">
-                        <span class="glyphicon glyphicon-duplicate"> </span>
                     </button>
             </div>
         </div>
-    </div>
-    <div id="divBody">
+    <div id="mainContent">
         <div id="menuPanel">
             <div id="menuPanelConfig">
                 <button id="btn_configGlobal" class="btn btn-sm btn_ver btn-danger btn-block" data-toggle="modal" data-target="#configModalGlobal">
@@ -373,7 +380,7 @@
                 <button id="btn_miniMenuPanel" class="btn btn-sm btn-default">
                         <span class="glyphicon glyphicon-step-backward"> </span>
                     </button>
-                <a href="./index_electron.html" id="btn_reset" class="btn btn-sm btn-danger">
+                <a href="./index.html" id="btn_reset" class="btn btn-sm btn-danger">
                     <span class="glyphicon glyphicon-off"> </span>
                 </a>
                 <br />
@@ -404,7 +411,6 @@
                         </button>
                 </div>
                 <div id="content_arduino" class="tab-pane">
-                    <pre id="pre_arduino"></pre>
                     <div id="barre_h">
                         <div id="checkDetails">
                             <input type="checkbox" name="detailedCompilation" id="detailedCompilation" /> <span id="span_detailedCompilation" style="color: white;"> </span>
@@ -415,10 +421,44 @@
                 </div>
                 <div id="content_supervision" class="tab-pane">
                 </div>
-                <!--div id="content_xml" class="tab-pane">
-                            <pre id="pre_xml"></pre>
-                    </div-->
             </div>
+        </div>
+    </div>
+    <div id="sidePreview">
+        <div class="arduino-preview-container">
+            <pre id="pre_previewArduino" title="Source code"></pre>
+            <button id="previewExpandBtn" aria-label="Expand preview" title="Expand preview" type="button" data-toggle="modal" data-target="#sideExpandModal">
+                <i class="bi bi-arrows-fullscreen"></i>
+            </button>
+        </div>
+        <div class="serial-tabs">
+            <button class="serial-tab-btn active" data-tab="messages">Messages</button>
+            <button class="serial-tab-btn" data-tab="serial">Serial</button>
+        </div>
+        <div id="messagesMonitor" class="serial-monitor">
+            <pre id="messagesOutput" class="serial-output"></pre>
+        </div>
+        <div id="serialMonitor" class="serial-monitor">
+            <div class="serial-monitor-row">
+                <div class="serial-monitor-top">
+                    <button id="side_btn_connect_monitor" class="btn serial-btn-connect">Serial On</button>
+                    <select id="baudRateSelect" class="serial-baudrate">
+                        <option value="9600">9600</option>
+                        <option value="19200">19200</option>
+                        <option value="38400">38400</option>
+                        <option value="57600">57600</option>
+                        <option value="115200">115200</option>
+                    </select>
+                    <button id="serialExpandBtn" class="btn serial-btn-send" type="button" data-toggle="modal" data-target="#serialExpandModal">
+                        <i class="bi bi-arrows-fullscreen"></i>
+                    </button>
+                </div>
+                <div class="serial-monitor-bottom">
+                    <input id="serialInput" type="text" placeholder="Type to send..." class="serial-input">
+                    <button id="serialSendBtn" class="btn serial-btn-send"><span class="fa fa-paper-plane"></span></button>
+                </div>
+            </div>
+            <pre id="serialOutput" class="serial-output"></pre>
         </div>
     </div>
     <!-- Modals -->
@@ -433,74 +473,21 @@
                         <label class="modal-title" id="aboutModalLabel" />
                     </h4>
                 </div>
+                
                 <div class="modal-body">
-                    <b> <span id="title"> </span> </b>
-                    <br />
-                    <br />
-                    <div align="center" id="paypal_about">
-                        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-                            <input type="hidden" name="cmd" value="_s-xclick" />
-                            <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
-                                       " />
-                            <input type="image" src="./media/BlocklyArduino/btn_donateCC_LG.gif" name="submit" alt="PayPal, le réflexe sécurité pour payer en ligne" />
-                            <img alt="" border="0" src="./media/BlocklyArduino/pixel.gif" width="1" height="1" />
-                        </form>
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <a href="https://github.com/basheerbk/blockide" target="_blank" class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-new-window"></span>
+                                    Visit GitHub Repository
+                                </a>
                     </div>
-                    <div align="center"><b><a href="http://framaforms.org/blocklyrduino-utilisateurs-1490560876" target='blank'><font size="5"><span id="span_forms_about" style="font-style: bold;"> </span></font></a></b></div>
-                    <br />
-                    <b>Forum</b> : <a href='http://blockly.technologiescollege.fr/forum' target='blank'><i class="fab fa-wpforms"></i> http://blockly.technologiescollege.fr/forum</a>
-                    <br />
-                    <br /><b>Documentation :</b> <a href="http://www.libreduc.cc/wiki/doku.php" target='blank'><i class="fab fa-wikipedia-w"></i> wiki</a>
-                    <br />
-                    <br />
-                    <span><b>Blockly@rduino</b></span> (<a href="https://github.com/technologiescollege/Blockly-at-rduino" target='blank'><i class="fab fa-github"></i> Github</a>)
-                    <span id="aboutBody" style="font-style: italic;"> </span>
-                    <br /> - Blockly : (<a href='https://developers.google.com/blockly' target='blank'>https://developers.google.com/blockly</a>)
-                    <br /> - Fred LIN (@gasolin) - BlocklyDuino : (<a href='https://github.com/BlocklyDuino/BlocklyDuino' target='blank'>https://github.com/BlocklyDuino/BlocklyDuino</a>)
-                    <br /> - Carlos PEREIRA ATENCIO - Ardublockly : (<a href='https://github.com/carlosperate/ardublockly' target='blank'>https://github.com/carlosperate/ardublockly</a>)
-                    <br /> - Alan YORINKS - PyMata-aio : (<a href='http://mryslab.blogspot.fr' target='blank'>http://mryslab.blogspot.fr</a>)
-                    <br /> - Tom NEUTENS - IDE java plugin : (<a href='https://github.com/dwengovzw/Blockly-for-Dwenguino' target='blank'>https://github.com/dwengovzw/Blockly-for-Dwenguino</a>)
-                    <br /> - JP FONTAINE - Electron version : (<a href='http://lesormeaux.net/blockly-arduino/start.html' target='blank'>http://lesormeaux.net/blockly-arduino/start.html</a>)
-                    <br /> - Camilo PARRA PALACIO - UI design : (<a href='https://www.ottodiy.com/' target='blank'>https://www.ottodiy.com/</a>)
-                    <br /> - Toshiyuki NAKAMURA - japan version : (<a href='https://meuse.co.jp/eshop/' target='blank'>https://meuse.co.jp/eshop/</a>)
-                    <br /> - Leroyd LAFFINEUR - icons design : (<a href='http://idehack.com' target='blank'>http://idehack.com</a>)
-                    <br /> - Bootstrap (<a href='http://getbootstrap.com' target='blank'>http://getbootstrap.com</a>)
-                    <br /> - Font Awesome Icons (<a href='http://fontawesome.io' target='blank'>http://fontawesome.io</a>)
-                    <br /> - OpenDyslexic (<a href='https://www.opendyslexic.org/' target='blank'>https://www.opendyslexic.org/</a>)
-                    <br /> - Bootstrap Toggle (<a href='http://www.bootstraptoggle.com/' target='blank'>http://www.bootstraptoggle.com/</a>)
-                    <br /> - JQuerry (<a href='https://jquery.com' target='blank'>https://jquery.com)</a>
-                    <br /> - HeadJS (<a href='http://headjs.com/' target='blank'>http://headjs.com/)</a>
-                    <br /> - SmoothieCharts (<a href='http://smoothiecharts.org/' target='blank'>http://smoothiecharts.org/)</a>
-                    <br />
-                    <br />
-                    <span id="span_version"> </span>
                 </div>
             </div>
-        </div>
-    </div>
-    <!-- paypal modal -->
-    <div class="modal fade" id="paypalModal" tabindex="-1" role="dialog" aria-labelledby="paypalModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&#215;</span></button>
-                    <h4>
-                        <span class="glyphicon glyphicon-euro"> </span>
-                        <label class="modal-title" id="paypalModalLabel" />
-                    </h4>
-                </div>
-                <div class="modal-body">
-                    <b> <span id="paypalBody"> </span> </b>
                     <br />
                     <br />
                     <div align="center" id="paypal_about">
-                        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-                            <input type="hidden" name="cmd" value="_s-xclick" />
-                            <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
-                                       " />
-                            <input type="image" src="./media/BlocklyArduino/btn_donateCC_LG.gif" name="submit" alt="PayPal, le réflexe sécurité pour payer en ligne" />
-                            <img alt="" border="0" src="./media/BlocklyArduino/pixel.gif" width="1" height="1" />
-                        </form>
+                       
                     </div>
                 </div>
             </div>
@@ -550,7 +537,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&#215;</span></button>
                     <h4 class="modal-title" id="exampleModalLabel"></h4>
-                    <b><a href="https://github.com/technologiescollege/BlocklyArduino-example"><i class="fab fa-github" aria-hidden="true"></i> Github </a></b>
+                    <b><a href="https://github.com/basheerbk/blockide"><i class="fab fa-github" aria-hidden="true"></i> Github </a></b>
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive">
@@ -665,16 +652,6 @@
                         <img id="arduino_card_mini_picture" />
                     </div>
                     <div class="modal-body-config-global_left">
-                        <span class="fa fa-language"></span> <label id="span_languageMenu"> </label> <select id="languageMenu"></select><br/>
-                        <!-- <label id="textSize" class="mod">Text size</label> -->
-                        <!-- <input name="textSizeSelect" class="form-control" style="" min="0" max="30" step="1" value="12" type="number"> -->
-                        <!-- </input> -->
-                        <br />
-                        <select id="fontChoice" onchange="BlocklyDuino.changeFontURL(this[this.selectedIndex].value)" onmousemove="BlocklyDuino.changeFont()">
-                                <option value="O">OpenDyslexic</option>
-                                <option value="T">Trebuchet MS</option>
-                                <option value="V">Verdana</option>
-                            </select>
                         <div id="divCard">
                             <br />
                             <span class="fa fa-microchip"></span> <label id="labelArduinoCard"></label>
@@ -780,7 +757,7 @@
                         <button id="btn_saveConfigGlobale" type="button" class="btn btn-success" style="position: absolute;left: 15px;"></button>
                     </div>
                     <div id="btn_validConfigGlobale_id">
-                        <button id="btn_validConfigGlobale" type="button" class="btn btn-primary" data-dismiss="modal"></button>
+                    <button id="btn_validConfigGlobale" type="button" class="btn btn-primary" data-dismiss="modal"></button>
                     </div>
                 </div>
             </div>
@@ -820,6 +797,25 @@
             </iframe>
     </div>
     <div id="arduino_IDE_code"> </div>
+    <!-- Backend Warning Modal -->
+    <div class="modal fade" id="backendWarningModal" tabindex="-1" role="dialog" aria-labelledby="backendWarningLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content" style="background: #ffcccc;">
+          <div class="modal-header">
+            <h5 class="modal-title" id="backendWarningLabel" style="color: #900;">
+              ⚠️ Backend server not reachable
+            </h5>
+          </div>
+          <div class="modal-body" style="color: #900;">
+            Compile, upload, and serial features will not work.<br>
+            Please make sure you are running <code>python server.py</code> on your local machine.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <script>
     // Robust error handling for missing dependencies and profile
     $(document).ready(function() {
@@ -849,15 +845,7 @@
 
     // Show a warning if backend is unreachable
     function showBackendWarning() {
-        if (!document.getElementById('backend-warning')) {
-            const warning = document.createElement('div');
-            warning.id = 'backend-warning';
-            warning.style = 'background: #ffcccc; color: #900; padding: 10px; text-align: center; font-weight: bold;';
-            warning.innerHTML =
-                '⚠️ Backend server not reachable. Compile, upload, and serial features will not work. ' +
-                'Please make sure you are running <code>python server.py</code> on your local machine.';
-            document.body.insertBefore(warning, document.body.firstChild);
-        }
+        $('#backendWarningModal').modal('show');
     }
 
     window.addEventListener('DOMContentLoaded', function() {
@@ -906,6 +894,7 @@
                 select.appendChild(option);
                 select.disabled = true;
                 showBackendWarning();
+                addMessage('Backend server not reachable. Compile, upload, and serial features will not work.', 'warning');
             });
         }
 
@@ -913,6 +902,460 @@
         updateSerialPorts();
         // Update every 2 seconds
         setInterval(updateSerialPorts, 2000);
+    });
+    </script>
+    <script>
+    // Remove SVG filter from Blockly bubbles to make them flat/plain
+    function removeBlocklyBubbleFilters() {
+        document.querySelectorAll('.blocklyBubbleCanvas [filter]').forEach(el => {
+            el.removeAttribute('filter');
+        });
+    }
+    // Run after each bubble is created and periodically as a fallback
+    setInterval(removeBlocklyBubbleFilters, 500);
+    </script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script>
+    (function() {
+        const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? ''
+            : 'http://localhost:5005';
+        // Elements
+        const portSelect = document.getElementById('side_serialport');
+        const connectBtn = document.getElementById('side_btn_connect_monitor');
+        const uploadBtn = document.getElementById('side_btn_upload');
+        const serialInput = document.getElementById('serialInput');
+        const serialSendBtn = document.getElementById('serialSendBtn');
+        const baudRateSelect = document.getElementById('baudRateSelect');
+        let serialConnected = false;
+        let connectedPort = null;
+        // Create the socket ONCE
+        const socket = io(BACKEND_URL || undefined);
+        // Register handlers ONCE
+        socket.on('serial_status', function(data) {
+            if (data.status === 'connected') {
+                serialConnected = true;
+                connectedPort = portSelect.value;
+                connectBtn.textContent = 'Serial Off';
+                connectBtn.disabled = false;
+                portSelect.disabled = true;
+                baudRateSelect.disabled = true;
+                serialInput.disabled = false;
+                serialSendBtn.disabled = false;
+                addMessage('Serial port open.', 'success');
+            } else if (data.status === 'disconnected' || data.status === 'not_open') {
+                serialConnected = false;
+                connectedPort = null;
+                connectBtn.textContent = 'Serial On';
+                connectBtn.disabled = false;
+                portSelect.disabled = false;
+                baudRateSelect.disabled = false;
+                serialInput.disabled = true;
+                serialSendBtn.disabled = true;
+                addMessage('Serial port closed.', 'info');
+            } else if (data.status === 'error') {
+                connectBtn.disabled = false;
+                addMessage('Serial error: ' + (data.error || 'Unknown error'), 'error');
+            }
+            if (window.syncModalSerialState) window.syncModalSerialState();
+        });
+        socket.on('serial_data', function(data) {
+            serialOutput.textContent += data.data;
+            serialOutput.scrollTop = serialOutput.scrollHeight;
+        });
+        // Helper to update upload button state
+        function updateUploadButtonState() {
+            uploadBtn.disabled = serialConnected;
+        }
+        updateUploadButtonState();
+        // 1. Populate port dropdown
+        function updatePorts() {
+            fetch(BACKEND_URL + '/ports')
+                .then(res => res.json())
+                .then(ports => {
+                    portSelect.innerHTML = '';
+                    if (!ports.length) {
+                        portSelect.innerHTML = '<option value="">No ports</option>';
+                        portSelect.disabled = true;
+                    } else {
+                        ports.forEach(port => {
+                            const opt = document.createElement('option');
+                            opt.value = port;
+                            opt.textContent = port;
+                            portSelect.appendChild(opt);
+                        });
+                        portSelect.disabled = false;
+                    }
+                })
+                .catch(() => {
+                    portSelect.innerHTML = '<option value="">Error</option>';
+                    portSelect.disabled = true;
+                });
+        }
+        updatePorts();
+        setInterval(updatePorts, 2000);
+        // 2. Connect/Disconnect logic (use single socket)
+        connectBtn.addEventListener('click', function() {
+            if (!serialConnected) {
+                // Try to open serial port
+                const port = portSelect.value;
+                const baudrate = baudRateSelect.value;
+                if (!port) {
+                    addMessage('Please select a port.', 'error');
+                    return;
+                }
+                connectBtn.disabled = true;
+                addMessage('Opening serial port...', 'info');
+                socket.emit('open_serial', { port, baudrate });
+            } else {
+                // Close serial port
+                connectBtn.disabled = true;
+                addMessage('Closing serial port...', 'info');
+                socket.emit('close_serial');
+            }
+        });
+        // 3. Upload logic (with auto-disconnect if serial is connected)
+        uploadBtn.addEventListener('click', function() {
+            function doUpload() {
+                const port = connectedPort || portSelect.value;
+                if (!port) {
+                    addMessage('Upload failed: No port selected', 'error');
+                    return;
+                }
+                const code = document.getElementById('pre_previewArduino').textContent;
+                const board = (typeof profile !== 'undefined' && profile.defaultBoard && profile.defaultBoard['upload_arg'])
+                    ? profile.defaultBoard['upload_arg']
+                    : 'arduino_uno';
+                if (!code || !code.trim()) {
+                    addMessage('Upload failed: No code to upload', 'error');
+                    return;
+                }
+                addMessage('Uploading to board (' + board + ') on port ' + port + '...', 'info');
+                serialInput.disabled = true;
+                serialSendBtn.disabled = true;
+                uploadBtn.disabled = true;
+                fetch(BACKEND_URL + '/upload', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code, board, port })
+                })
+                .then(res => res.json())
+                .then(result => {
+                    if (result.success) {
+                        addMessage('Upload completed successfully!', 'success');
+                    } else {
+                        addMessage('Upload failed: ' + (result.error || result.message || 'Unknown error'), 'error');
+                    }
+                })
+                .catch(err => {
+                    addMessage('Upload failed: ' + err.message, 'error');
+                })
+                .finally(() => {
+                    serialInput.disabled = !serialConnected ? false : true;
+                    serialSendBtn.disabled = !serialConnected ? false : true;
+                    uploadBtn.disabled = serialConnected;
+                });
+            }
+            if (serialConnected && socket) {
+                socket.emit('close_serial');
+                // Wait for disconnect event before uploading
+                let waited = 0;
+                const maxWait = 3000; // 3 seconds
+                function waitForDisconnect() {
+                    if (!serialConnected) {
+                        setTimeout(doUpload, 1000); // Wait 1 second after disconnect
+                    } else if (waited >= maxWait) {
+                        alert('Could not disconnect serial monitor. Upload aborted.');
+                    } else {
+                        waited += 100;
+                        setTimeout(waitForDisconnect, 100);
+                    }
+                }
+                waitForDisconnect();
+            } else {
+                doUpload();
+            }
+        });
+        // Send data to serial
+        serialSendBtn.addEventListener('click', function() {
+            const val = serialInput.value;
+            if (val && serialConnected && socket) {
+                socket.emit('write_serial', { data: val + '\n' });
+                serialInput.value = '';
+            }
+        });
+        serialInput.disabled = true;
+        serialSendBtn.disabled = true;
+    })();
+    </script>
+    <script>
+    // Tab switching functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabButtons = document.querySelectorAll('.serial-tab-btn');
+        const serialMonitor = document.getElementById('serialMonitor');
+        const messagesMonitor = document.getElementById('messagesMonitor');
+        const clearMessagesBtn = document.getElementById('clearMessages');
+        const messagesOutput = document.getElementById('messagesOutput');
+        const serialMonitorRow = document.querySelector('#serialMonitor .serial-monitor-row');
+
+        // Function to switch tabs
+        function switchTab(tabName) {
+            tabButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.tab === tabName) {
+                    btn.classList.add('active');
+                }
+            });
+
+            if (tabName === 'serial') {
+                serialMonitor.style.display = 'block';
+                messagesMonitor.style.display = 'none';
+                if (serialMonitorRow) serialMonitorRow.style.display = '';
+            } else {
+                serialMonitor.style.display = 'none';
+                messagesMonitor.style.display = 'block';
+                if (serialMonitorRow) serialMonitorRow.style.display = 'none';
+            }
+        }
+
+        // Add click handlers to tab buttons
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                switchTab(btn.dataset.tab);
+            });
+        });
+
+        // Clear messages functionality
+        clearMessagesBtn.addEventListener('click', () => {
+            messagesOutput.textContent = '';
+        });
+
+        // Function to add a message to the messages monitor
+        window.addMessage = function(message, type = 'info') {
+            var messagesOutput = document.getElementById('messagesOutput');
+            if (!messagesOutput) return;
+            var messageElement = document.createElement('div');
+            messageElement.className = `message ${type}`;
+            messageElement.textContent = message;
+            messagesOutput.appendChild(messageElement);
+            messagesOutput.scrollTop = messagesOutput.scrollHeight;
+        };
+
+        // Example messages (you can remove these)
+        addMessage('System initialized', 'info');
+        addMessage('Ready to connect', 'info');
+    });
+    </script>
+    <!-- Serial Monitor Expand Modal -->
+    <div class="modal fade" id="serialExpandModal" tabindex="-1" role="dialog" aria-labelledby="serialExpandModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="serial-monitor-row" style="margin-bottom: 12px;">
+              <div class="serial-monitor-top">
+                <button id="serialExpandConnectBtn" class="btn serial-btn-connect">Serial On</button>
+                <select id="serialExpandBaudRate" class="serial-baudrate">
+                  <option value="9600">9600</option>
+                  <option value="19200">19200</option>
+                  <option value="38400">38400</option>
+                  <option value="57600">57600</option>
+                  <option value="115200">115200</option>
+                </select>
+              </div>
+              <div class="serial-monitor-bottom">
+                <input id="serialExpandInput" type="text" placeholder="Type to send..." class="serial-input">
+                <button id="serialExpandSendBtn" class="btn serial-btn-send"><span class="fa fa-paper-plane"></span></button>
+              </div>
+            </div>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <pre id="serialExpandOutput" class="serial-output"></pre>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Code Preview Expand Modal -->
+    <div class="modal fade" id="sideExpandModal" tabindex="-1" role="dialog" aria-labelledby="sideExpandModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" style="height:60vh; position:relative; padding-top:48px;">
+            <div style="position:relative; height:100%;">
+              <button id="sideExpandCopyBtn" style="position:absolute; top:8px; right:10px; z-index:10; background:transparent; border:none; font-size:1.5em; color:#990099; cursor:pointer;" title="Copy to clipboard">
+                <i class="bi bi-clipboard"></i>
+              </button>
+              <pre id="sideExpandOutput" class="serial-output" style="height:100%; min-height:400px; max-height:55vh; font-size:1.2em; margin:0;"></pre>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Serial Expand Modal Sync Script -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get main and modal elements
+        const mainConnectBtn = document.getElementById('side_btn_connect_monitor');
+        const modalConnectBtn = document.getElementById('serialExpandConnectBtn');
+        const mainBaud = document.getElementById('baudRateSelect');
+        const modalBaud = document.getElementById('serialExpandBaudRate');
+        const mainInput = document.getElementById('serialInput');
+        const modalInput = document.getElementById('serialExpandInput');
+        const mainSendBtn = document.getElementById('serialSendBtn');
+        const modalSendBtn = document.getElementById('serialExpandSendBtn');
+        const mainOutput = document.getElementById('serialOutput');
+        const modalOutput = document.getElementById('serialExpandOutput');
+
+        // Sync modal controls when modal is shown
+        $('#serialExpandModal').on('show.bs.modal', function() {
+            // Sync button text and state
+            modalConnectBtn.textContent = mainConnectBtn.textContent;
+            modalConnectBtn.disabled = mainConnectBtn.disabled;
+            // Sync baud rate
+            modalBaud.value = mainBaud.value;
+            // Sync output
+            modalOutput.textContent = mainOutput.textContent;
+            // Sync input
+            modalInput.value = mainInput.value;
+        });
+
+        // Keep output in sync (when new data arrives)
+        const observer = new MutationObserver(() => {
+            modalOutput.textContent = mainOutput.textContent;
+        });
+        observer.observe(mainOutput, { childList: true, characterData: true, subtree: true });
+
+        // When modal connect is clicked, trigger main connect
+        modalConnectBtn.addEventListener('click', function() {
+            mainBaud.value = modalBaud.value; // sync baud
+            mainConnectBtn.click();
+        });
+
+        // When modal send is clicked, trigger main send
+        modalSendBtn.addEventListener('click', function() {
+            mainInput.value = modalInput.value;
+            mainSendBtn.click();
+            modalInput.value = '';
+        });
+
+        // When modal baud changes, sync to main
+        modalBaud.addEventListener('change', function() {
+            mainBaud.value = modalBaud.value;
+        });
+
+        // When modal input changes, sync to main
+        modalInput.addEventListener('input', function() {
+            mainInput.value = modalInput.value;
+        });
+
+        // When serial status changes, update modal controls too
+        function syncModalSerialState() {
+            modalConnectBtn.textContent = mainConnectBtn.textContent;
+            modalConnectBtn.disabled = mainConnectBtn.disabled;
+            modalBaud.disabled = mainBaud.disabled;
+            modalInput.disabled = mainInput.disabled;
+            modalSendBtn.disabled = mainSendBtn.disabled;
+        }
+        window.syncModalSerialState = syncModalSerialState;
+    });
+    </script>
+    <!-- Code Preview Expand Modal Sync Script -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get main and modal elements for code preview
+        const mainPreview = document.getElementById('pre_previewArduino');
+        const modalOutput = document.getElementById('sideExpandOutput');
+        const copyBtn = document.getElementById('sideExpandCopyBtn');
+
+        // Sync modal content when modal is shown
+        $('#sideExpandModal').on('show.bs.modal', function() {
+            // Copy content from main preview to modal
+            modalOutput.textContent = mainPreview.textContent;
+            
+            // Apply syntax highlighting if available
+            if (typeof prettyPrintOne === 'function') {
+                modalOutput.innerHTML = prettyPrintOne(modalOutput.textContent, 'cpp');
+            }
+        });
+
+        // Keep modal content in sync when main preview changes
+        const observer = new MutationObserver(() => {
+            if ($('#sideExpandModal').hasClass('in')) {
+                modalOutput.textContent = mainPreview.textContent;
+                if (typeof prettyPrintOne === 'function') {
+                    modalOutput.innerHTML = prettyPrintOne(modalOutput.textContent, 'cpp');
+                }
+            }
+        });
+        observer.observe(mainPreview, { childList: true, characterData: true, subtree: true });
+
+        // Handle copy button functionality
+        copyBtn.addEventListener('click', function() {
+            const textToCopy = modalOutput.textContent;
+            
+            // Use modern clipboard API if available
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    // Show temporary success message
+                    const originalTitle = copyBtn.title;
+                    copyBtn.title = 'Copied!';
+                    copyBtn.style.color = '#28a745';
+                    
+                    setTimeout(() => {
+                        copyBtn.title = originalTitle;
+                        copyBtn.style.color = '#990099';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                    fallbackCopyTextToClipboard(textToCopy);
+                });
+            } else {
+                // Fallback for older browsers
+                fallbackCopyTextToClipboard(textToCopy);
+            }
+        });
+
+        // Fallback copy function for older browsers
+        function fallbackCopyTextToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    const originalTitle = copyBtn.title;
+                    copyBtn.title = 'Copied!';
+                    copyBtn.style.color = '#28a745';
+                    
+                    setTimeout(() => {
+                        copyBtn.title = originalTitle;
+                        copyBtn.style.color = '#990099';
+                    }, 2000);
+                }
+            } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+            }
+            
+            document.body.removeChild(textArea);
+        }
     });
     </script>
 </body>

@@ -102,6 +102,17 @@ BlocklyDuino.renderArduinoCodePreview = function() {
         $('#pre_previewArduino').html(prettyPrintOne($('#pre_previewArduino').html(), 'cpp'));
         $('#pre_arduino').html(prettyPrintOne($('#pre_previewArduino').html(), 'cpp'));
     }
+    
+    // Also update modal content if modal is open
+    if ($('#sideExpandModal').hasClass('in')) {
+        var modalOutput = document.getElementById('sideExpandOutput');
+        if (modalOutput) {
+            modalOutput.textContent = $('#pre_previewArduino').text();
+            if (typeof prettyPrintOne == 'function') {
+                modalOutput.innerHTML = prettyPrintOne(modalOutput.textContent, 'cpp');
+            }
+        }
+    }
 };
 
 /**
@@ -169,33 +180,22 @@ BlocklyDuino.valideEditedCode = function() {
 };
 
 /**
- * Render Arduino code in preview box
- */
-BlocklyDuino.renderArduinoCodePreview = function() {
-    var cardId = BlocklyDuino.getStringParamFromUrl('card', '');
-    if (cardId != 'kit_microbit') {
-        $('#pre_previewArduino').text(Blockly.Arduino.workspaceToCode(BlocklyDuino.workspace));
-        $('#pre_arduino').text(Blockly.Arduino.workspaceToCode(BlocklyDuino.workspace));
-    } else {
-        $('#pre_previewArduino').text(Blockly.Python.workspaceToCode(BlocklyDuino.workspace));
-        $('#pre_arduino').text(Blockly.Python.workspaceToCode(BlocklyDuino.workspace));
-    }
-    if (typeof prettyPrintOne == 'function') {
-        $('#pre_previewArduino').html(prettyPrintOne($('#pre_previewArduino').html(), 'cpp'));
-        $('#pre_arduino').html(prettyPrintOne($('#pre_previewArduino').html(), 'cpp'));
-    }
-};
-
-/**
- * Extracts a parameter from the URL.
- * If the parameter is absent default_value is returned.
- * @param {string} name The name of the parameter.
- * @param {string} defaultValue Value to return if paramater not found.
+ * Get parameters from URL.
+ * @param {string} name Parameter name.
+ * @param {string} defaultValue Value of parameter if not present.
  * @return {string} The parameter value or the default value if not found.
  */
 BlocklyDuino.getStringParamFromUrl = function(name, defaultValue) {
     var val = location.search.match(new RegExp('[?&]' + name + '=([^&]+)'));
     return val ? decodeURIComponent(val[1].replace(/\+/g, '%20')) : defaultValue;
+};
+
+/**
+ * Get the size of the window.
+ * @return {string} The size parameter from URL or 'max' by default.
+ */
+BlocklyDuino.getSize = function() {
+    return BlocklyDuino.getStringParamFromUrl('size', 'max');
 };
 
 /**
@@ -794,12 +794,14 @@ BlocklyDuino.changeLevelToolboxDefinition = function(level) {
  * Initialize Blockly.  Called on page load.
  */
 BlocklyDuino.init = function() {
+    // Set default language to English
+    Code.LANG = 'en';
+
+    // Set default font to Trebuchet MS
+    document.body.style.fontFamily = "Trebuchet MS";
 
     BlocklyDuino.setOrientation();
-
     BlocklyDuino.testAjax();
-
-    BlocklyDuino.changeFontURL();
 
     if ($('#toolbox').length) {
         BlocklyDuino.toolboxInIndexHtml = true;
@@ -811,8 +813,7 @@ BlocklyDuino.init = function() {
 
     Code.initLanguage();
 
-    if (BlocklyDuino.getSize() != '') {
-        if (BlocklyDuino.getSize() == 'max') {
+    // Set maximized view as default
             $("#menuPanel").css({ "display": "none" });
             // maximize div
             $("#divTabpanel").css({ "margin-left": "0px" });
@@ -823,92 +824,6 @@ BlocklyDuino.init = function() {
             $('#icon_btn_size').removeClass('glyphicon-resize-full');
             $('#icon_btn_size').addClass('glyphicon-resize-small');
             $('#div_toolboxes').prepend($('#toolboxes'));
-        }
-        if (BlocklyDuino.getSize() == 'miniMenu') {
-            $("#menuPanel").css({ "width": "40px" });
-            $("#divTabpanel").css({ "margin-left": "50px" });
-            $(".blocklyFlyout").css({ "margin-left": "155px" });
-            $(".blocklySvg").css({ "margin-left": "205px" });
-            $(".blocklyWorkspace").css({ "margin-left": "205px" });
-            $("#configGlobalLabel").remove();
-            $("#btn_configGlobal").removeClass("btn-block");
-            $("#divTitreMenu_miniCard").removeClass("hidden");
-            $('#icon_btn_size').addClass('glyphicon-resize-full');
-            $('#icon_btn_size').removeClass('glyphicon-resize-small');
-            $("#div_miniPicture").remove();
-            $("#btn_config_kit").remove();
-            $("#btn_miniMenuPanel > span").removeClass("glyphicon-step-backward");
-            $("#btn_miniMenuPanel > span").addClass("glyphicon-step-forward");
-
-            $("#span_config").addClass("hidden");
-            $("#btn_config").removeClass("btn-block");
-
-            $(".nav").removeClass("display-block");
-            $(".nav").css({ "width": "40px" });
-            $("#a_supervision").addClass("hidden");
-            $("#a_blocks").addClass("hidden");
-            $("#a_arduino").addClass("hidden");
-
-            $("#span_saveXML").addClass("hidden");
-            $("#btn_saveXML").removeClass("btn-block");
-
-            $("#span_fakeload").addClass("hidden");
-            $("#btn_fakeload").removeClass("btn-block");
-
-            $("#span_example").addClass("hidden");
-            $("#btn_example").removeClass("btn-block");
-
-            $("#span_create_example").addClass("hidden");
-            $("#btn_create_example").removeClass("btn-block");
-
-            $("#menuPanelConfig").addClass("btn-group-vertical");
-            $("#menuPanelFiles").addClass("btn-group-vertical");
-            $("#menuPanelFiles").css({ "margin-bottom": "10px" });
-            $("#div_about").addClass("btn-group-vertical");
-            $("#div_about").css({ "width": "40px", "bottom": "10px", "position": "fixed" });
-            $("#span_about").remove();
-            $("#div_tools_button").addClass("btn-group-vertical");
-            $("#div_tools_button").removeClass("div_tools_button-ver");
-            $("#div_tools_button").css({ "width": "40px", "margin-bottom": "10px" });
-
-            $("#logo_Titre").css({
-                'width': '40px',
-                'position': 'absolute',
-                'right': '250px',
-                'bottom': '40px',
-                'z-index': '10'
-            });
-            $("#header").css({ "height": "0px" });
-            $("#divBody").css({ "top": "0px" });
-            $("#logo_Titre").removeClass("hidden");
-            $("#btn_delete").css({ "bottom": "80px" });
-            $("#divTitreMenu_miniCard").css({
-                'position': 'fixed',
-                'top': '510px',
-                'left': '5px',
-                'z-index': '10'
-            });
-            $("#tools_blocks").css({
-                'position': 'absolute',
-                'z-index': '10',
-                'right': '0px'
-            });
-        }
-    } else {
-        $("#menuPanel").css({ "display": "" });
-        // minimize div
-        $("#divTabpanel").css({ "margin-left": "205px" });
-        $('#btn_size').attr("title", MSG['btn_size_max']);
-        $('#divTitre').removeClass("hidden");
-        $('#div_toolboxes').removeClass("hidden");
-        $('#divTitreMenu').addClass("hidden");
-        $("#divTitreMenu_miniCard").addClass("hidden");
-        $("#div_miniPicture").removeClass("hidden");
-        $('#icon_btn_size').addClass('glyphicon-resize-full');
-        $('#icon_btn_size').removeClass('glyphicon-resize-small');
-        $("#btn_miniMenuPanel > span").addClass("glyphicon-step-backward");
-        $("#btn_miniMenuPanel > span").removeClass("glyphicon-step-forward");
-    }
 
     BlocklyDuino.setArduinoBoard();
 

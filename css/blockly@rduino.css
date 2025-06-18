@@ -35,7 +35,7 @@ html,body {
 }
 
 #header {
-	background: #018790;
+	background: #990099;
 	height: 36px;
 }
 
@@ -98,7 +98,7 @@ html,body {
 	font-size: 14px;
 	/* line-height: 0; */
 	padding: 3px 10px;
-	border: 1px solid #000000;
+	border: .5 px solid #23002d;
 }
 .btn-sm:hover, .btn:hover {
 	background-color: #FFFFFF; 
@@ -405,15 +405,15 @@ html[dir="RTL"] #languageMenu {
 }
 #barre{
 	padding : 3px 0px 0px 10px;
-	background-color : #018790;
+	background-color : #990099;
 }
 #barre_h{
 	padding : 5px 5px 5px 10px;
-	background-color : #018790;
+	background-color : #990099;
 }
 #barre_ide{
 	padding : 2px 5px 5px 10px;
-	background-color : #018790;
+	background-color : #990099;
 }
 #btn_term {
 	right: 15px;
@@ -437,7 +437,7 @@ html[dir="RTL"] #toggle_code {
 
 #btn_delete {
 	position: absolute;
-	right: 100px;
+	right: 80px;
 	bottom: 40px;
 	z-index: 10;
 }
@@ -640,7 +640,7 @@ html[dir="RTL"] .colors_category {
 ----------------------------------*/
 
 .btn-arduino { 
-  color: #018790; 
+  color: #990099; 
   width: 28px;
   height: 28px;
   background-color: #006468; 
@@ -650,7 +650,7 @@ html[dir="RTL"] .colors_category {
   border-radius:50%;
 } 
 .btn-arduinoRect { 
-  color: #018790;
+  color: #990099;
   width: 28px;
   height: 28px;
   background-color: #006468; 
@@ -745,3 +745,7 @@ h4{
 .fa-terminal:before{content:"\f120"}
 .fa-paypal:before{content:"\f1ed"}
 .fa-github:before{content:"\f09b"}
+
+#barre_ide, #barre_h, #barre {
+  box-shadow: 0 -2px 8px rgba(153,0,153,0.10);
+}

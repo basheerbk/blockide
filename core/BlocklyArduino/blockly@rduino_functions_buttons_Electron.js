@@ -266,55 +266,49 @@ BlocklyDuino.verify_local_Click = function() {
 
 // Upload button handler
 BlocklyDuino.uploadClick = function() {
-    console.log("Upload button clicked");
-    if (typeof profile === 'undefined' || !profile.defaultBoard || !profile.defaultBoard['upload_arg']) {
-        alert("Board profile is not defined. Please select a board.");
+    // Get the code, board, and port
+    var code = $('#pre_arduino').text();
+    var port = document.getElementById('serialport_ide').value;
+    var board = (typeof profile !== 'undefined' && profile.defaultBoard && profile.defaultBoard['upload_arg'])
+        ? profile.defaultBoard['upload_arg']
+        : 'arduino_uno'; // fallback
+
+    // Edge case: No code
+    if (!code || code.trim() === "") {
+        alert("No code to upload. Please generate code first.");
         return;
     }
-    var board = "board=" + profile.defaultBoard['upload_arg'];
-    var url = "http://127.0.0.1:5005/set_board";
-    var method = "POST";
-    var async = true;
-    var request = new XMLHttpRequest();
-    request.open(method, url, async);
-    request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    request.onreadystatechange = function() {
-        if (request.readyState == 4 && request.status == 200) {
-            alert(request.responseText);
-        }
+    // Edge case: No port
+    if (!port || port === 'no_com') {
+        alert("No serial port selected. Please connect your board and select a port.");
+        return;
     }
-    request.send(board);
-    setTimeout(function() {
-        var code = $('#pre_arduino').text();
-        var port = document.getElementById('serialport_ide').value;
-        url = "http://127.0.0.1:5005/upload?port=" + encodeURIComponent(port);
-        request.open(method, url, async);
-        request.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
-        request.onreadystatechange = function() {
-            if (request.readyState == 4) {
-                try {
-                    var resp = JSON.parse(request.responseText);
-                    if (resp.success) {
-                        alert("Upload successful!\n" + resp.message);
-                    } else {
-                        alert("Upload failed!\n" + resp.message);
-                    }
-                } catch (e) {
-                    if (request.status === 0) {
-                        alert("Network error or backend not reachable.");
-                    } else if (request.status >= 400) {
-                        alert("Upload failed!\n" + request.responseText);
-                    } else {
-                        alert("Unexpected response: " + request.responseText);
-                    }
-                }
-            }
+    // Edge case: No board
+    if (!board) {
+        alert("No board selected. Please select a board in the configuration.");
+        return;
+    }
+
+    fetch('http://127.0.0.1:5005/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            code: code,
+            board: board,
+            port: port
+        })
+    })
+    .then(response => response.json())
+    .then(resp => {
+        if (resp.success || resp.message === 'Upload successful') {
+            alert("Upload successful!\n" + (resp.message || ''));
+        } else {
+            alert("Upload failed!\n" + (resp.message || resp.error));
         }
-        request.onerror = function() {
-            alert("Network error during upload request.");
-        };
-        request.send(code);
-    }, 1000);
+    })
+    .catch(err => {
+        alert("Network error or backend not reachable.\n" + err);
+    });
 };
 
 // Bind the handlers to the buttons
