@@ -454,9 +454,7 @@ select {
 }
 
 /* === Moved from inline <style> in index.html === */
-#barre_ide {
-  /* Remove previous flex and style rules for #barre_ide */
-}
+
 #serial-controls {
   display: flex;
   align-items: center;
