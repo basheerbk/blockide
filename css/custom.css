@@ -199,76 +199,50 @@ select {
 }
 
 .serial-dropdown {
-    padding: 7px 1px;
-    border-radius: 6px;
-    border: 1px solid #990099;
-    font-size: 1em;
-    color: #ffffff;
-    height: 10px;
-    background: #990099;
-    min-width: 10px;
-    outline: none;
-    transition: border 0.2s, box-shadow 0.2s;
-    font-weight: 500;
-}
-
-.serial-dropdown:focus {
-    border-color: #ffffff;
-    box-shadow: 0 0 0 2px #e0b3e6;
+    all: unset;
 }
 
 #sideSerialControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  margin-bottom: 6px;
+  padding: 6px 10px;
   position: absolute;
   top: 3px;
   right: 15px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  padding: 6px 10px;
   z-index: 1001;
 }
 
 #sideSerialControls select,
 #sideSerialControls button {
-  font-size: 0.85em;
-  padding: 3px 8px;
-  border: none;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.9);
-  color: #333;
+  height: 28px;
+  min-width: 70px;
+  padding: 0 16px;
+  border-radius: 6px !important;
+  font-size: 1em;
   font-weight: bold;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s, border 0.2s;
-}
-
-#sideSerialControls button {
-  background: rgba(255, 255, 255, 0.9);
-  color: #333;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  font-weight: bold;
-  transition: background 0.2s, color 0.2s, border 0.2s;
-}
-
-#sideSerialControls button:hover {
-  background: rgba(255, 255, 255, 1);
-  color: #000;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-}
-
-#sideSerialControls select {
-  color: #333 !important;
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
-  background: rgba(255, 255, 255, 0.9) !important;
-  font-weight: bold !important;
+  color: #990099 !important;
+  background: #fff !important;
+  border: 2px solid #990099 !important;
+  box-sizing: border-box;
+  outline: none;
+  margin: 0;
+  box-shadow: none;
   transition: background 0.2s, color 0.2s, border 0.2s !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+#sideSerialControls select:focus,
 #sideSerialControls select:hover,
-#sideSerialControls select:focus {
-  background: rgba(255, 255, 255, 1) !important;
-  color: #000 !important;
-  border: 1px solid rgba(0, 0, 0, 0.3) !important;
+#sideSerialControls button:focus,
+#sideSerialControls button:hover {
+  background: #990099 !important;
+  color: #fff !important;
+  border: 2px solid #990099 !important;
 }
 
 #baudRateSelect,
@@ -378,23 +352,7 @@ select {
   border: 1px solid #990099 !important;
 }
 
-#side_btn_upload {
-  min-width: 60px;
-  width: 60px;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-  background: #28a745 !important;
-  color: #fff !important;
-  border: 1px solid #28a745 !important;
-  font-weight: bold !important;
-  border-radius: 6px !important;
-  transition: background 0.2s, color 0.2s, border 0.2s !important;
-}
-#side_btn_upload:hover, #side_btn_upload:focus {
-  background: #ffffff;
-  color: #00ff2a;
-  border: 2px solid #28a745;
-}
+
 
 .serial-monitor-row {
   display: flex;
@@ -1022,4 +980,35 @@ select {
 #serialMonitor:not(.active),
 #messagesMonitor:not(.active) {
   display: none !important;
+}
+
+#sideSerialControls #side_board_name {
+  width: 70px;
+  min-width: 0;
+  max-width: 100px;
+  padding: 0 8px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  height: 28px;
+  border-radius: 6px !important;
+  font-size: 1em;
+  font-weight: bold;
+  color: #990099 !important;
+  background: #fff !important;
+  border: 2px solid #990099 !important;
+  box-sizing: border-box;
+  outline: none;
+  margin: 0;
+  box-shadow: none;
+  transition: background 0.2s, color 0.2s, border 0.2s !important;
+  text-align: center;
+}
+
+/* Remove hover/focus for board name */
+#sideSerialControls #side_board_name:focus,
+#sideSerialControls #side_board_name:hover {
+  background: #fff !important;
+  color: #990099 !important;
+  border: 2px solid #990099 !important;
 } 

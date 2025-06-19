@@ -247,9 +247,9 @@
             </div>
         </div>
         <div id="sideSerialControls" class="serial-controls">
-            <select id="side_serialport" class="serial-dropdown">
-                <option value="">Select Port</option>
-            </select>
+            <input id="side_board_name" type="text" readonly placeholder="Board Name" />
+            <span id="side_board_name_measure" style="visibility:hidden;position:absolute;white-space:pre;font-weight:bold;font-size:1em;font-family:inherit;"></span>
+            <select id="side_serialport" class="serial-dropdown"><option value="COM8">COM8</option></select>
             <button id="side_btn_upload" class="btn btn-success">Upload</button>
         </div>
         <div id="header_code" class="hidden-section">
@@ -1107,13 +1107,15 @@
                 }
             });
 
+            // Remove active class from both monitors
+            serialMonitor.classList.remove('active');
+            messagesMonitor.classList.remove('active');
+
             if (tabName === 'serial') {
-                serialMonitor.style.display = 'block';
-                messagesMonitor.style.display = 'none';
+                serialMonitor.classList.add('active');
                 if (serialMonitorRow) serialMonitorRow.style.display = '';
             } else {
-                serialMonitor.style.display = 'none';
-                messagesMonitor.style.display = 'block';
+                messagesMonitor.classList.add('active');
                 if (serialMonitorRow) serialMonitorRow.style.display = 'none';
             }
         }
@@ -1126,9 +1128,11 @@
         });
 
         // Clear messages functionality
-        clearMessagesBtn.addEventListener('click', () => {
-            messagesOutput.textContent = '';
-        });
+        if (clearMessagesBtn) {
+            clearMessagesBtn.addEventListener('click', () => {
+                messagesOutput.textContent = '';
+            });
+        }
 
         // Function to add a message to the messages monitor
         window.addMessage = function(message, type = 'info') {
@@ -1141,6 +1145,9 @@
             messagesOutput.scrollTop = messagesOutput.scrollHeight;
         };
 
+        // Initialize with messages tab active
+        switchTab('messages');
+        
         // Example messages (you can remove these)
         addMessage('System initialized', 'info');
         addMessage('Ready to connect', 'info');
@@ -1357,6 +1364,53 @@
             document.body.removeChild(textArea);
         }
     });
+    </script>
+    <script>
+    function updateBoardNameBox() {
+        var boardSelect = document.getElementById('board_select');
+        var boardNameBox = document.getElementById('side_board_name');
+        var measureSpan = document.getElementById('side_board_name_measure');
+        if (boardSelect && boardNameBox && measureSpan) {
+            var selectedOption = boardSelect.options[boardSelect.selectedIndex];
+            var boardName = selectedOption ? selectedOption.text : '';
+            boardNameBox.value = boardName;
+
+            // Set the span's text and copy styles
+            measureSpan.textContent = boardName || boardNameBox.placeholder || '';
+            var style = window.getComputedStyle(boardNameBox);
+            measureSpan.style.font = style.font;
+            measureSpan.style.fontWeight = style.fontWeight;
+            measureSpan.style.fontSize = style.fontSize;
+            measureSpan.style.fontFamily = style.fontFamily;
+            measureSpan.style.letterSpacing = style.letterSpacing;
+            measureSpan.style.padding = style.padding;
+            measureSpan.style.border = style.border;
+
+            // Calculate width (add a little extra for padding and border)
+            var width = measureSpan.offsetWidth + 20;
+            // Set min/max width for usability
+            width = Math.max(60, Math.min(width, 200));
+            boardNameBox.style.width = width + 'px';
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        var boardSelect = document.getElementById('board_select');
+        if (boardSelect) {
+            boardSelect.addEventListener('change', updateBoardNameBox);
+        }
+        updateBoardNameBox();
+    });
+    </script>
+    <script>
+    // Patch BlocklyDuino.setArduinoBoard to call updateBoardNameBox after board change
+    (function() {
+        var origSetArduinoBoard = BlocklyDuino.setArduinoBoard;
+        BlocklyDuino.setArduinoBoard = function() {
+            var result = origSetArduinoBoard.apply(this, arguments);
+            if (typeof updateBoardNameBox === 'function') updateBoardNameBox();
+            return result;
+        };
+    })();
     </script>
 </body>
 </HTML>
