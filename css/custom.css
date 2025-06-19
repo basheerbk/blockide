@@ -273,11 +273,12 @@ select {
 
 #baudRateSelect,
 #serialExpandBaudRate {
-  border: 1.5px solid #990099 !important;
+  border: .5px solid #990099 !important;
+  margin-top: 1px;
   border-radius: 6px;
   color: #990099;
-  height: 38px;
-  padding: 0 18px;
+  height: 24px;
+  padding: 0 14px;
   font-size: 1.1em;
   font-weight: bold;
   box-sizing: border-box;
@@ -291,16 +292,16 @@ select {
 #side_btn_connect_monitor {
   background: #fffefe !important;
   color: 990099 !important;
-  border: 1px solid #990099 !important;
+  border: .75px solid #990099 !important;
   font-weight: bold !important;
   border-radius: 6px !important;
   padding-right: 10px;
   transition: background 0.2s, color 0.2s, border 0.2s !important;
 }
 #side_btn_connect_monitor:hover, #side_btn_connect_monitor:focus {
-  background: #ffffff !important;
-  color: #990099 !important;
-  border: 1px solid #990099!important;
+  background: #990099 !important;
+  color: #fff !important;
+  border: 0px solid #990099!important;
 }
 
 .serial-btn-connect {
@@ -315,8 +316,8 @@ select {
   transition: background 0.2s, color 0.2s, border 0.2s;
   box-sizing: border-box;
 }
-.serial-btn-connect:hover, .serial-btn-connect:focus {
-  background: #dd0093 !important;
+.serial-btn-connect:hover {
+  background: #990099 !important;
   color: #fff !important;
   border: 1px solid #882181 !important;
 }
@@ -614,8 +615,8 @@ select {
 }
 
 .serial-tab-btn:hover {
-  background: #d0d0d0;
-  color: #333;
+  background: #ffffff;
+  color: #1d1d1d;
 }
 
 .serial-tab-btn.active {
@@ -637,7 +638,7 @@ select {
   align-items: center;
   padding: 8px 12px;
   background: #ffffff;
-  border-bottom: px solid #ffffff;
+  border-bottom: 0px solid #ffffff;
 }
 
 .messages-header h4 {
@@ -720,7 +721,7 @@ select {
 /* Messages output area */
 #messagesOutput {
   background: #ffffff;
-  border: 1px solid #e0e0e0;
+  border: 0px solid #e0e0e0;
   color: #000000;
   font-family: monospace;
   font-size: 0.9em;
