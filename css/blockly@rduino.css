@@ -631,7 +631,7 @@ html[dir="RTL"] .colors_category {
 /* Prototype window
 ----------------------------------*/
 .popup_effect {
-  background:#11455A;
+  background:#990099;
   opacity: 0.2;
 }
 
@@ -643,7 +643,7 @@ html[dir="RTL"] .colors_category {
   color: #990099; 
   width: 28px;
   height: 28px;
-  background-color: #006468; 
+  background-color: #990099; 
   border-color: #000000; 
   line-height: 28px;
   padding:0;
@@ -653,7 +653,7 @@ html[dir="RTL"] .colors_category {
   color: #990099;
   width: 28px;
   height: 28px;
-  background-color: #006468; 
+  background-color: #990099; 
   border-color: #000000; 
   line-height: 1px;
   padding:0;

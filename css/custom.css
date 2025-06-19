@@ -240,7 +240,7 @@ select {
 #sideSerialControls select:hover,
 #sideSerialControls button:focus,
 #sideSerialControls button:hover {
-  background: #990099 !important;
+  background: #00990d !important;
   color: #fff !important;
   border: 2px solid #990099 !important;
 }
@@ -1009,4 +1009,84 @@ select {
   background: #fff !important;
   color: #990099 !important;
   border: 2px solid #990099 !important;
+}
+
+#btn_boards_modal {
+  margin-left: 2px;
+  margin-right: 10px;
+  font-weight: bold;
+  background: #990099;
+  color: #fff;
+  border: 0px;
 } 
+
+#btn_boards_modal:hover{
+ background : #990099;
+ color : #ffffff;
+ border : 0.5px solid #ffffff;
+}
+
+nav a:hover {
+  background: #990099 !important;
+  color: #fff !important;
+}
+
+#boardsModal .modal-dialog {
+  width: 900px;
+  max-width: 98vw;
+  min-width: 600px;
+  height: 650px;
+  max-height: 98vh;
+  margin: 30px auto;
+}
+#boardsModal .modal-content {
+  height: 100%;
+  min-height: 500px;
+  max-height: 98vh;
+  overflow-y: auto;
+}
+@media (max-width: 1000px) {
+  #boardsModal .modal-dialog {
+    width: 98vw;
+    min-width: 0;
+    height: 90vh;
+    margin: 10px auto;
+  }
+  #boardsModal .modal-content {
+    min-height: 0;
+    height: 100%;
+    max-height: 90vh;
+  }
+}
+
+nav a i[class*="caret"] {
+  color: #fff !important; /* or any color you want */
+}
+
+#btn_left_bottom {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  background: #990099;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0;
+  font-size: 0.9em;
+  height: 38px;
+  width: 90px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  z-index: 10 !important;
+  
+}
+#btn_left_bottom:hover {
+  background: #7c007e;
+  color: #fff;
+}
