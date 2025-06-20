@@ -160,9 +160,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li>
-                                <button id="btn_boards_modal" class="btn btn-primary" data-toggle="modal" data-target="#boardsModal">BOARDS</button>
-                            </li>
+                            
                             <li>
                                 <a><i class="fa fa-user"></i> <span id="span_menu_3"> </span> <i class="fa fa-caret-down"></i></a>
                                 <ul class="submenu">
@@ -260,7 +258,7 @@
             </div>
         </div>
         <div id="sideSerialControls" class="serial-controls">
-            <input id="side_board_name" type="text" readonly placeholder="Board Name" />
+            <button id="btn_boards_modal" data-toggle="modal" data-target="#boardsModal">Boards</button>
             <span id="side_board_name_measure" style="visibility:hidden;position:absolute;white-space:pre;font-weight:bold;font-size:1em;font-family:inherit;"></span>
             <select id="side_serialport" class="serial-dropdown"><option value="COM8">COM8</option></select>
             <button id="side_btn_upload" class="btn btn-success">Upload</button>
@@ -1436,8 +1434,44 @@
             <h4 class="modal-title" id="boardsModalLabel">Boards</h4>
           </div>
           <div class="modal-body">
-            <!-- Add your board selection or info here -->
-            <p>Select or manage your boards here.</p>
+            <div class="boards-grid">
+              <div class="board-card">
+                <img src="media/new_boards/esp32.png" alt="ESP32">
+                <div class="board-label">ESP32</div>
+              </div>
+              <div class="board-card selected">
+                <img src="media/new_boards/arduino_uno.png" alt="Arduino Uno">
+                <div class="board-label">Arduino Uno</div>
+              </div>
+              <div class="board-card">
+                <img src="media/new_boards/arduino_mega.png" alt="Arduino Mega">
+                <div class="board-label">Arduino Mega</div>
+              </div>
+              <div class="board-card">
+                <img src="media/new_boards/arduino_nano.png" alt="Arduino Nano">
+                <div class="board-label">Arduino Nano</div>
+              </div>
+              <div class="board-card">
+                <img src="media/new_boards/raspberry_pico.png" alt="Raspberry Pico">
+                <div class="board-label">Raspberry Pico</div>
+              </div>
+              <div class="board-card">
+                <img src="media/new_boards/raspberry_pico2.png" alt="Raspberry Pico">
+                <div class="board-label">Raspberry Pico</div>
+              </div>
+              <div class="board-card">
+                <img src="media/new_boards/microbit_v2.png" alt="Micro:Bit V2">
+                <div class="board-label">Micro:Bit V2</div>
+              </div>
+              <div class="board-card">
+                <img src="media/new_boards/microbit_v2b.png" alt="Micro:Bit V2">
+                <div class="board-label">Micro:Bit V2</div>
+              </div>
+              <div class="board-card">
+                <img src="media/new_boards/raspberry_pi.png" alt="Raspberry Pi">
+                <div class="board-label">Raspberry Pi</div>
+              </div>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1477,6 +1511,28 @@
     $(document).ready(function() {
       $('#btn_left_bottom').on('click', function() {
         $('#configModal').modal('show');
+      });
+    });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Delegate click event to all .board-card elements in the boards modal
+      document.querySelectorAll('#boardsModal .board-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+          // Remove 'selected' from all cards
+          document.querySelectorAll('#boardsModal .board-card').forEach(function(c) {
+            c.classList.remove('selected');
+          });
+          // Add 'selected' to clicked card
+          card.classList.add('selected');
+          // Get the board name from the label
+          var label = card.querySelector('.board-label');
+          if (label) {
+            var boardName = label.textContent.trim();
+            var btn = document.getElementById('btn_boards_modal');
+            if (btn) btn.textContent = boardName;
+          }
+        });
       });
     });
     </script>
