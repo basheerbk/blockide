@@ -241,9 +241,9 @@ select {
 #sideSerialControls select:hover,
 #sideSerialControls button:focus:not(#btn_boards_modal),
 #sideSerialControls button:hover:not(#btn_boards_modal) {
-  background: #06a716 !important;
+  background: #990099 !important;
   color: #fff !important;
-  border: .5px solid #ffffff !important;
+  border: 1px solid #990099 !important;
 }
 
 #baudRateSelect,

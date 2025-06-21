@@ -35,24 +35,13 @@ Blockly.Blocks['soft_init'] = {
   init: function() {
     this.setColour(Blockly.Blocks.arduino_softserial.HUE);
 	this.setHelpUrl('https://www.arduino.cc/en/Reference/SoftwareSerial');
-	//only arduino mega admit multi softserial connection
-	if (window.profile.defaultBoard != window.profile["mega"]) {
-		this.appendDummyInput()
-			.appendField(Blockly.Msg.SSERIAL_Init)
-			.appendField(
-				new Blockly.FieldInstance('SoftSerial',
-										  Blockly.Msg.SSERIAL_DEFAULT_NAME,
-										  false, true, false),
-				'SOFTSERIAL_NAME');
-	} else {
-		this.appendDummyInput()
-			.appendField(Blockly.Msg.SSERIAL_Init)
-			.appendField(
-				new Blockly.FieldInstance('SoftSerial',
-										  Blockly.Msg.SSERIAL_DEFAULT_NAME,
-										  false, false, false),
-				'SOFTSERIAL_NAME');
-		};
+	this.appendDummyInput()
+		.appendField(Blockly.Msg.SSERIAL_Init)
+		.appendField(
+			new Blockly.FieldInstance('SoftSerial',
+									  Blockly.Msg.SSERIAL_DEFAULT_NAME,
+									  false, false, false),
+			'SOFTSERIAL_NAME');
     this.appendValueInput("PIN1")
         .setAlign(Blockly.ALIGN_RIGHT)
 		.setCheck('Number')
@@ -63,7 +52,7 @@ Blockly.Blocks['soft_init'] = {
         .appendField(Blockly.Msg.SSERIAL_TX);
     this.appendDummyInput()
 	    .appendField(Blockly.Msg.SSERIAL_SPEED)
-     	.appendField(new Blockly.FieldDropdown(profile.defaultBoard.serial), "SPEED");
+     	.appendField(new Blockly.FieldDropdown([["9600", "9600"], ["38400", "38400"], ["57600", "57600"], ["115200", "115200"]]), "SPEED");
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -75,23 +64,13 @@ Blockly.Blocks['soft_read'] = {
   init: function() {
     this.setColour(Blockly.Blocks.arduino_softserial.HUE);
 	this.setHelpUrl('https://www.arduino.cc/en/Reference/SoftwareSerial');
-	if (window.profile.defaultBoard != window.profile["mega"]) {
-		this.appendDummyInput()
-			.appendField(
-				new Blockly.FieldInstance('SoftSerial',
-										  Blockly.Msg.SSERIAL_DEFAULT_NAME,
-										  false, true, false),
-				'SOFTSERIAL_NAME')
-			.appendField(Blockly.Msg.SSERIAL_Read);
-	} else {
-		this.appendDummyInput()
-			.appendField(
-				new Blockly.FieldInstance('SoftSerial',
-										  Blockly.Msg.SSERIAL_DEFAULT_NAME,
-										  false, false, false),
-				'SOFTSERIAL_NAME')
-			.appendField(Blockly.Msg.SSERIAL_Read);
-		};
+	this.appendDummyInput()
+		.appendField(
+			new Blockly.FieldInstance('SoftSerial',
+									  Blockly.Msg.SSERIAL_DEFAULT_NAME,
+									  false, false, false),
+			'SOFTSERIAL_NAME')
+		.appendField(Blockly.Msg.SSERIAL_Read);
     this.setInputsInline(false);
     this.setOutput(true, 'String');
     this.setTooltip('');
@@ -120,21 +99,12 @@ Blockly.Blocks['soft_readStringUntil'] = {
   init: function() {
     this.setColour(Blockly.Blocks.arduino_softserial.HUE);
 	this.setHelpUrl(Blockly.Msg.ARDUINO_SERIAL_READSTRINGUNTIL_HELPURL);
-	if (window.profile.defaultBoard != window.profile["mega"]) {
-		this.appendDummyInput()
-			.appendField(
-				new Blockly.FieldInstance('SoftSerial',
-										  Blockly.Msg.SSERIAL_DEFAULT_NAME,
-										  false, true, false),
-				'SOFTSERIAL_NAME');
-	} else {
-		this.appendDummyInput()
-			.appendField(
-				new Blockly.FieldInstance('SoftSerial',
-										  Blockly.Msg.SSERIAL_DEFAULT_NAME,
-										  false, false, false),
-				'SOFTSERIAL_NAME');
-		};
+	this.appendDummyInput()
+		.appendField(
+			new Blockly.FieldInstance('SoftSerial',
+									  Blockly.Msg.SSERIAL_DEFAULT_NAME,
+									  false, false, false),
+			'SOFTSERIAL_NAME');
     this.appendValueInput("CONTENT")
 		.setCheck('String')
         .appendField(Blockly.Msg.ARDUINO_SERIAL_READSTRINGUNTIL_CONTENT);
@@ -166,25 +136,14 @@ Blockly.Blocks['soft_print'] = {
   init: function() {
 	this.setHelpUrl('https://www.arduino.cc/en/Reference/SoftwareSerial');
     this.setColour(Blockly.Blocks.arduino_softserial.HUE);
-	if (window.profile.defaultBoard != window.profile["mega"]) {
-		this.appendValueInput("CONTENT")
-			.appendField(
-				new Blockly.FieldInstance('SoftSerial',
-										  Blockly.Msg.SSERIAL_DEFAULT_NAME,
-										  false, true, false),
-				'SOFTSERIAL_NAME')
-			.setCheck('String')
-			.appendField(Blockly.Msg.SSERIAL_Print);
-	} else {
-		this.appendValueInput("CONTENT")
-			.appendField(
-				new Blockly.FieldInstance('SoftSerial',
-										  Blockly.Msg.SSERIAL_DEFAULT_NAME,
-										  false, false, false),
-				'SOFTSERIAL_NAME')
-			.setCheck('String')
-			.appendField(Blockly.Msg.SSERIAL_Print);
-		};
+	this.appendValueInput("CONTENT")
+		.appendField(
+			new Blockly.FieldInstance('SoftSerial',
+									  Blockly.Msg.SSERIAL_DEFAULT_NAME,
+									  false, false, false),
+			'SOFTSERIAL_NAME')
+		.setCheck('String')
+		.appendField(Blockly.Msg.SSERIAL_Print);
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -214,25 +173,14 @@ Blockly.Blocks['soft_write'] = {
   init: function() {
 	this.setHelpUrl('https://www.arduino.cc/en/Reference/SoftwareSerial');
     this.setColour(Blockly.Blocks.arduino_softserial.HUE);
-	if (window.profile.defaultBoard != window.profile["mega"]) {
-		this.appendValueInput("CONTENT")
-			.appendField(
-				new Blockly.FieldInstance('SoftSerial',
-										  Blockly.Msg.SSERIAL_DEFAULT_NAME,
-										  false, true, false),
-				'SOFTSERIAL_NAME')
-			.setCheck('String')
-			.appendField(Blockly.Msg.SSERIAL_Write);
-	} else {
-		this.appendValueInput("CONTENT")
-			.appendField(
-				new Blockly.FieldInstance('SoftSerial',
-										  Blockly.Msg.SSERIAL_DEFAULT_NAME,
-										  false, false, false),
-				'SOFTSERIAL_NAME')
-			.setCheck('String')
-			.appendField(Blockly.Msg.SSERIAL_Write);
-		};
+	this.appendValueInput("CONTENT")
+		.appendField(
+			new Blockly.FieldInstance('SoftSerial',
+									  Blockly.Msg.SSERIAL_DEFAULT_NAME,
+									  false, false, false),
+			'SOFTSERIAL_NAME')
+		.setCheck('String')
+		.appendField(Blockly.Msg.SSERIAL_Write);
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -262,23 +210,13 @@ Blockly.Blocks['soft_available'] = {
   init: function() {
 	this.setHelpUrl('https://www.arduino.cc/en/Reference/SoftwareSerial');
     this.setColour(Blockly.Blocks.arduino_softserial.HUE);
-	if (window.profile.defaultBoard != window.profile["mega"]) {
-		this.appendDummyInput("")
-			.appendField(
-				new Blockly.FieldInstance('SoftSerial',
-										  Blockly.Msg.SSERIAL_DEFAULT_NAME,
-										  false, true, false),
-				'SOFTSERIAL_NAME')
-			.appendField(Blockly.Msg.SSERIAL_Avai);
-	} else {
-		this.appendDummyInput("")
-			.appendField(
-				new Blockly.FieldInstance('SoftSerial',
-										  Blockly.Msg.SSERIAL_DEFAULT_NAME,
-										  false, false, false),
-				'SOFTSERIAL_NAME')
-			.appendField(Blockly.Msg.SSERIAL_Avai);
-		};
+	this.appendDummyInput("")
+		.appendField(
+			new Blockly.FieldInstance('SoftSerial',
+									  Blockly.Msg.SSERIAL_DEFAULT_NAME,
+									  false, false, false),
+			'SOFTSERIAL_NAME')
+		.appendField(Blockly.Msg.SSERIAL_Avai);
     this.setInputsInline(false);
     this.setOutput(true, 'Boolean');
     this.setTooltip('');
@@ -307,23 +245,13 @@ Blockly.Blocks['soft_flush'] = {
   init: function() {
     this.setColour(Blockly.Blocks.arduino_softserial.HUE);
 	this.setHelpUrl('http://arduino.cc/en/Serial/Flush');
-	if (window.profile.defaultBoard != window.profile["mega"]) {
-		this.appendDummyInput()
-			.appendField(
-				new Blockly.FieldInstance('SoftSerial',
-										  Blockly.Msg.SSERIAL_DEFAULT_NAME,
-										  false, true, false),
-				'SOFTSERIAL_NAME')
-			.appendField(Blockly.Msg.Serial_flush);
-	} else {
-		this.appendDummyInput()
-			.appendField(
-				new Blockly.FieldInstance('SoftSerial',
-										  Blockly.Msg.SSERIAL_DEFAULT_NAME,
-										  false, false, false),
-				'SOFTSERIAL_NAME')
-			.appendField(Blockly.Msg.Serial_flush);
-		};
+	this.appendDummyInput()
+		.appendField(
+			new Blockly.FieldInstance('SoftSerial',
+									  Blockly.Msg.SSERIAL_DEFAULT_NAME,
+									  false, false, false),
+			'SOFTSERIAL_NAME')
+		.appendField(Blockly.Msg.Serial_flush);
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);

@@ -14,15 +14,7 @@ app = Flask(__name__, static_folder='../', static_url_path='')
 # Configure CORS to allow all origins for local development
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
-selected_board = "arduino:avr:uno"
-
-BOARD_FQBN_MAP = {
-    "arduino_uno": "arduino:avr:uno",
-    "esp32": "esp32:esp32:esp32s3",  # Default to ESP32-S3 for 'esp32'
-    "esp32s3": "esp32:esp32:esp32s3",
-    "esp8266": "esp8266:esp8266:nodemcuv2",
-    # Add more as needed
-}
+selected_board = None
 
 def get_arduino_cli_path():
     # Try project root first
@@ -38,14 +30,24 @@ def get_arduino_cli_path():
 @app.route('/set_board', methods=['POST'])
 def set_board():
     global selected_board
-    board = request.form.get('board')
-    if board:
-        selected_board = board
-        return f"Board set to {board}", 200
-    return "No board specified", 400
+    data = request.get_json()
+    if not data or 'board' not in data:
+        return jsonify({"success": False, "message": "Board FQBN not provided"}), 400
+
+    board_fqbn = data.get('board')
+    if board_fqbn:
+        selected_board = board_fqbn
+        print(f"[SERVER] Board set to {selected_board}")
+        return jsonify({"success": True, "message": f"Board set to {selected_board}"}), 200
+    
+    return jsonify({"success": False, "message": "Invalid board data"}), 400
 
 @app.route('/compile', methods=['POST'])
 def compile_code():
+    global selected_board
+    if not selected_board:
+        return jsonify({"success": False, "message": "Please select a board first"}), 400
+        
     code = request.data.decode('utf-8')
     # Save code to a temporary .ino file with the correct name
     with tempfile.TemporaryDirectory() as tmpdirname:
@@ -66,40 +68,22 @@ def compile_code():
         except Exception as e:
             return jsonify({"success": False, "message": str(e)}), 500
 
-def detect_fqbn_for_port(port, board_hint=None):
-    arduino_cli_path = get_arduino_cli_path()
-    try:
-        result = subprocess.run(
-            [arduino_cli_path, "board", "list", "--format", "json"],
-            capture_output=True, text=True, timeout=10
-        )
-        if result.returncode == 0:
-            boards = json.loads(result.stdout)
-            for b in boards.get("boards", []):
-                if b.get("port") == port and b.get("fqbn"):
-                    return b["fqbn"]
-    except Exception as e:
-        print(f"[DETECT FQBN] Error: {e}")
-    # Fallback logic
-    if board_hint and "8266" in board_hint:
-        return "esp8266:esp8266:nodemcuv2"
-    return "esp32:esp32:xiaoesp32s3"  # Default to XIAO ESP32-S3
-
 @app.route('/upload', methods=['POST'])
 def upload_code():
+    global selected_board
+    if not selected_board:
+        return jsonify({"success": False, "message": "Please select a board first"}), 400
+
     code = None
     port = None
-    board_hint = None
 
     if request.is_json:
         data = request.get_json()
         code = data.get('code')
         port = data.get('port')
-        board_hint = data.get('board')  # This can be "esp8266", "esp32", etc.
     else:
         code = request.form.get('code') or request.data.decode('utf-8')
         port = request.form.get('port') or request.args.get('port') or request.headers.get('X-Serial-Port')
-        board_hint = request.form.get('board')
 
     if not port:
         print("[UPLOAD] No serial port specified.")
@@ -108,7 +92,7 @@ def upload_code():
         print("[UPLOAD] No code provided.")
         return jsonify({"success": False, "message": "No code provided."}), 400
 
-    fqbn = detect_fqbn_for_port(port, board_hint)
+    fqbn = selected_board
     print(f"[UPLOAD] Using FQBN: {fqbn}")
 
     with tempfile.TemporaryDirectory() as tmpdirname:
@@ -179,6 +163,7 @@ def read_serial():
             if data:
                 socketio.emit('serial_data', {'data': data})
         except Exception as e:
+            print(f"[SERIAL] Error while reading from port: {e}")
             break
 
 @socketio.on('open_serial')
@@ -186,30 +171,41 @@ def handle_open_serial(data):
     global serial_conn, serial_thread
     port = data.get('port')
     baudrate = int(data.get('baudrate', 9600))
+    print(f"[SERIAL] Attempting to open port {port} at {baudrate} baud.")
     with serial_lock:
         if serial_conn and serial_conn.is_open:
-            emit('serial_status', {'status': 'already_open', 'message': f'Port {serial_conn.port} already open.'})
-            return
+            print(f"[SERIAL] Error: Port {serial_conn.port} is already open.")
+            return {'success': False, 'error': f'Port {serial_conn.port} already open.'}
         try:
             serial_conn = serial.Serial(port, baudrate, timeout=1)
+            print(f"[SERIAL] Successfully opened port {port}.")
             serial_thread = threading.Thread(target=read_serial, daemon=True)
             serial_thread.start()
-            emit('serial_status', {'status': 'connected'})
+            return {'success': True}
+        except serial.SerialException as se:
+            print(f"[SERIAL] SerialException on port {port}: {se}")
+            return {'success': False, 'error': str(se)}
         except Exception as e:
-            emit('serial_status', {'status': 'error', 'message': str(e)})
+            print(f"[SERIAL] Generic exception on port {port}: {e}")
+            return {'success': False, 'error': str(e)}
 
 @socketio.on('close_serial')
-def handle_close_serial():
+def handle_close_serial(data):
     global serial_conn
+    print("[SERIAL] Attempting to close port.")
     with serial_lock:
         if serial_conn and serial_conn.is_open:
             try:
+                port_name = serial_conn.port
                 serial_conn.close()
-                emit('serial_status', {'status': 'disconnected'})
+                print(f"[SERIAL] Successfully closed port {port_name}.")
+                return {'success': True}
             except Exception as e:
-                emit('serial_status', {'status': 'error', 'message': str(e)})
+                print(f"[SERIAL] Exception while closing port: {e}")
+                return {'success': False, 'error': str(e)}
         else:
-            emit('serial_status', {'status': 'not_open', 'message': 'No port open.'})
+            print("[SERIAL] Error: No port was open to close.")
+            return {'success': False, 'error': 'No port open.'}
 
 @socketio.on('write_serial')
 def handle_write_serial(data):
@@ -219,10 +215,12 @@ def handle_write_serial(data):
         if serial_conn and serial_conn.is_open:
             try:
                 serial_conn.write(msg.encode())
+                return {'success': True}
             except Exception as e:
-                emit('serial_status', {'status': 'error', 'message': str(e)})
+                print(f"[SERIAL] Error writing to port: {e}")
+                return {'success': False, 'error': str(e)}
         else:
-            emit('serial_status', {'status': 'not_open', 'message': 'No port open.'})
+            return {'success': False, 'error': 'No port open.'}
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=5005) 

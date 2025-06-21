@@ -24,6 +24,7 @@ head.load(
 "generators/arduino/arduino_BT.js",
 "generators/arduino/arduino_io.js",
 "generators/arduino/arduino_conversion.js",
+"generators/arduino/arduino_process.js",
 "generators/arduino/arduino_serial.js",
 "generators/arduino/arduino_softserial.js",
 "generators/arduino/Adafruit_motorshield_v1.js",

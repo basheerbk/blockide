@@ -764,38 +764,37 @@
         let connectedPort = null;
         // Create the socket ONCE
         const socket = io(BACKEND_URL || undefined);
-        // Register handlers ONCE
-        socket.on('serial_status', function(data) {
-            if (data.status === 'connected') {
-                serialConnected = true;
-                connectedPort = portSelect.value;
-                connectBtn.textContent = 'Serial Off';
-                connectBtn.disabled = false;
-                portSelect.disabled = true;
-                baudRateSelect.disabled = true;
-                serialInput.disabled = false;
-                serialSendBtn.disabled = false;
-                addMessage('Serial port open.', 'success');
-            } else if (data.status === 'disconnected' || data.status === 'not_open') {
-                serialConnected = false;
-                connectedPort = null;
-                connectBtn.textContent = 'Serial On';
-                connectBtn.disabled = false;
-                portSelect.disabled = false;
-                baudRateSelect.disabled = false;
-                serialInput.disabled = true;
-                serialSendBtn.disabled = true;
-                addMessage('Serial port closed.', 'info');
-            } else if (data.status === 'error') {
-                connectBtn.disabled = false;
-                addMessage('Serial error: ' + (data.error || 'Unknown error'), 'error');
-            }
+
+        let isConnecting = false;
+
+        function updateUiState() {
+            connectBtn.disabled = isConnecting;
+            uploadBtn.disabled = serialConnected || isConnecting;
+            portSelect.disabled = serialConnected || isConnecting;
+            baudRateSelect.disabled = serialConnected || isConnecting;
+            serialInput.disabled = !serialConnected;
+            serialSendBtn.disabled = !serialConnected;
+            connectBtn.textContent = serialConnected ? 'Serial Off' : 'Serial On';
             if (window.syncModalSerialState) window.syncModalSerialState();
-        });
+        }
+
         socket.on('serial_data', function(data) {
-            serialOutput.textContent += data.data;
-            serialOutput.scrollTop = serialOutput.scrollHeight;
+            if (serialOutput) {
+                serialOutput.textContent += data.data;
+                serialOutput.scrollTop = serial.scrollHeight;
+            }
+            if (modalOutput) {
+                modalOutput.textContent += data.data;
+                modalOutput.scrollTop = modalOutput.scrollHeight;
+            }
         });
+
+        socket.on('disconnect', function() {
+            serialConnected = false;
+            addMessage('Serial port disconnected.', 'info');
+            updateUiState();
+        });
+
         // Helper to update upload button state
         function updateUploadButtonState() {
             uploadBtn.disabled = serialConnected;
@@ -827,30 +826,62 @@
         }
         updatePorts();
         setInterval(updatePorts, 2000);
-        // 2. Connect/Disconnect logic (use single socket)
-        connectBtn.addEventListener('click', function() {
+        
+        connectBtn.addEventListener('click', () => {
+            if (isConnecting) return;
+
             if (!serialConnected) {
-                // Try to open serial port
+                // --- CONNECT ---
                 const port = portSelect.value;
                 const baudrate = baudRateSelect.value;
-                if (!port) {
-                    addMessage('Please select a port.', 'error');
+                if (!port || port === "") {
+                    addMessage('Please select a valid port.', 'error');
                     return;
                 }
-                connectBtn.disabled = true;
-                addMessage('Opening serial port...', 'info');
-                socket.emit('open_serial', { port, baudrate });
+
+                isConnecting = true;
+                updateUiState();
+                addMessage(`Opening port ${port}...`, 'info');
+
+                socket.timeout(5000).emit('open_serial', { port, baudrate }, (err, response) => {
+                    isConnecting = false;
+                    if (err) {
+                        addMessage('Connection timed out. The port may be stuck or in use.', 'error');
+                    } else if (response && response.success) {
+                        serialConnected = true;
+                        addMessage('Serial port open.', 'success');
+                    } else {
+                        addMessage('Failed to open port: ' + (response.error || 'Unknown error'), 'error');
+                    }
+                    updateUiState();
+                });
             } else {
-                // Close serial port
-                connectBtn.disabled = true;
+                // --- DISCONNECT ---
+                isConnecting = true;
+                updateUiState();
                 addMessage('Closing serial port...', 'info');
-                socket.emit('close_serial');
+
+                socket.timeout(5000).emit('close_serial', {}, (err, response) => {
+                    isConnecting = false;
+                    // serialConnected is now set by the 'disconnect' event
+                    if (err) {
+                        addMessage('Failed to close port cleanly (timeout).', 'error');
+                        serialConnected = false; // Force state update on error
+                    } else if (response && response.success) {
+                        addMessage('Serial port closed.', 'info');
+                    } else {
+                        addMessage('Failed to close port: ' + (response && response.error ? response.error : 'Unknown error'), 'error');
+                        serialConnected = false; // Force state update on error
+                    }
+                    updateUiState();
+                });
             }
         });
+
         // 3. Upload logic (with auto-disconnect if serial is connected)
         uploadBtn.addEventListener('click', function() {
             function doUpload() {
-                const port = connectedPort || portSelect.value;
+                const port = portSelect.value;
                 if (!port) {
                     addMessage('Upload failed: No port selected', 'error');
                     return;
@@ -864,9 +895,11 @@
                     return;
                 }
                 addMessage('Uploading to board (' + board + ') on port ' + port + '...', 'info');
-                serialInput.disabled = true;
-                serialSendBtn.disabled = true;
-                uploadBtn.disabled = true;
+                
+                // Disable all serial controls during upload
+                isConnecting = true;
+                updateUiState();
+
                 fetch(BACKEND_URL + '/upload', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -884,35 +917,28 @@
                     addMessage('Upload failed: ' + err.message, 'error');
                 })
                 .finally(() => {
-                    serialInput.disabled = !serialConnected ? false : true;
-                    serialSendBtn.disabled = !serialConnected ? false : true;
-                    uploadBtn.disabled = serialConnected;
+                    isConnecting = false;
+                    updateUiState();
                 });
             }
+
             if (serialConnected && socket) {
-                socket.emit('close_serial');
-                // Wait for disconnect event before uploading
-                let waited = 0;
-                const maxWait = 3000; // 3 seconds
-                function waitForDisconnect() {
-                    if (!serialConnected) {
-                        setTimeout(doUpload, 1000); // Wait 1 second after disconnect
-                    } else if (waited >= maxWait) {
-                        alert('Could not disconnect serial monitor. Upload aborted.');
-                    } else {
-                        waited += 100;
-                        setTimeout(waitForDisconnect, 100);
+                addMessage('Closing serial port for upload...', 'info');
+                socket.emit('close_serial', {}, (err, response) => {
+                    if (err || (response && !response.success)) {
+                         addMessage('Could not disconnect serial monitor. Upload aborted.', 'error');
+                         return;
                     }
-                }
-                waitForDisconnect();
+                    // Wait a moment for the port to be released before uploading
+                    setTimeout(doUpload, 1000);
+                });
             } else {
                 doUpload();
             }
         });
-        // Send data to serial
         serialSendBtn.addEventListener('click', function() {
             const val = serialInput.value;
-            if (val && serialConnected && socket) {
+            if (val && serialConnected) {
                 socket.emit('write_serial', { data: val + '\n' });
                 serialInput.value = '';
             }
@@ -1246,27 +1272,27 @@
           </div>
           <div class="modal-body">
             <div class="boards-grid">
-              <div class="board-card">
+              <div class="board-card" data-fqbn="esp32:esp32:esp32s3">
                 <img src="media/new_boards/sky.png" alt="Skyrover">
                 <div class="board-label">Skyrover</div>
               </div>
-              <div class="board-card selected">
+              <div class="board-card" data-fqbn="arduino:avr:uno">
                 <img src="media/new_boards/arduino_uno.png" alt="Arduino Uno">
                 <div class="board-label">Arduino Uno</div>
               </div>
-              <div class="board-card">
+              <div class="board-card" data-fqbn="arduino:avr:mega">
                 <img src="media/new_boards/arduino_mega.png" alt="Arduino Mega">
                 <div class="board-label">Arduino Mega</div>
               </div>
-              <div class="board-card">
+              <div class="board-card" data-fqbn="arduino:avr:nano">
                 <img src="media/new_boards/arduino_nano.png" alt="Arduino Nano">
                 <div class="board-label">Arduino Nano</div>
               </div>
-              <div class="board-card">
+              <div class="board-card" data-fqbn="esp32:esp32:esp32">
                 <img src="media/new_boards/esp32.png" alt="ESP 32">
                 <div class="board-label">ESP 32</div>
               </div>
-              <div class="board-card">
+              <div class="board-card" data-fqbn="esp8266:esp8266:nodemcuv2">
                 <img src="media/new_boards/image-2.png" alt="Node MCU">
                 <div class="board-label">Node MCU</div>
               </div>
@@ -1315,6 +1341,42 @@
     </script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+      function setInitialBoard() {
+        const defaultCard = document.querySelector('#boardsModal .board-card.selected');
+        if (defaultCard) {
+          const fqbn = defaultCard.getAttribute('data-fqbn');
+          const boardName = defaultCard.querySelector('.board-label').textContent.trim();
+          
+          // Update button text
+          var btn = document.getElementById('btn_boards_modal');
+          if (btn) btn.textContent = boardName;
+
+          if (fqbn) {
+            fetch(BACKEND_URL + '/set_board', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ board: fqbn })
+            })
+            .then(res => res.json())
+            .then(data => {
+              if (data.success) {
+                console.log('Initial board set:', data.message);
+              } else {
+                console.error('Failed to set initial board:', data.message);
+                addMessage('Error setting initial board: ' + data.message, 'error');
+              }
+            })
+            .catch(err => {
+              console.error('Error setting initial board:', err);
+              addMessage('Error communicating with backend to set initial board.', 'error');
+            });
+          }
+        }
+      }
+
+      // Set the initial board state when the page loads
+      setInitialBoard();
+
       // Delegate click event to all .board-card elements in the boards modal
       document.querySelectorAll('#boardsModal .board-card').forEach(function(card) {
         card.addEventListener('click', function() {
@@ -1324,12 +1386,35 @@
           });
           // Add 'selected' to clicked card
           card.classList.add('selected');
-          // Get the board name from the label
-          var label = card.querySelector('.board-label');
-          if (label) {
-            var boardName = label.textContent.trim();
-            var btn = document.getElementById('btn_boards_modal');
-            if (btn) btn.textContent = boardName;
+          
+          var boardName = card.querySelector('.board-label').textContent.trim();
+          var fqbn = card.getAttribute('data-fqbn');
+          
+          // Update button text
+          var btn = document.getElementById('btn_boards_modal');
+          if (btn) btn.textContent = boardName;
+          
+          // Send FQBN to backend
+          if (fqbn) {
+            fetch(BACKEND_URL + '/set_board', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ board: fqbn })
+            })
+            .then(res => res.json())
+            .then(data => {
+              if (data.success) {
+                console.log('Board set:', data.message);
+                addMessage('Board set to ' + boardName, 'success');
+              } else {
+                console.error('Failed to set board:', data.message);
+                addMessage('Error setting board: ' + data.message, 'error');
+              }
+            })
+            .catch(err => {
+              console.error('Error setting board:', err);
+              addMessage('Error communicating with backend to set board.', 'error');
+            });
           }
         });
       });
