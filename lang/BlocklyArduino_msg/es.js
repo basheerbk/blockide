@@ -40,7 +40,7 @@ var MSG = {
   span_flash_local: " Transfiere a la tarjeta",
   span_flash_local_result: " Resultado de la descarga",
   span_detailedCompilation: " Resultados detallados",
-  firstModalLabel: "Bienvenido a Blockly@rduino !",
+  firstModalLabel: "Bienvenido a Skyrover.ai !",
   span_first_msg: "Marca para no ver más este mensaje",
   btn_valid_first_msg: "Lo he entendido",
   exampleModalLabel: "Escoje un ejemplo",

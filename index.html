@@ -113,14 +113,18 @@
 
 <body onload="BlocklyDuino.init(); maximizePage();">
     <script>
-    window.addMessage = function(message, type = 'info') {
+    // This is the new, correct function for adding messages to the top
+    function addNewMessage(message, type = 'info') {
         var messagesOutput = document.getElementById('messagesOutput');
         if (!messagesOutput) return;
         var messageElement = document.createElement('div');
         messageElement.className = `message ${type}`;
         messageElement.textContent = message;
-        messagesOutput.appendChild(messageElement);
-        messagesOutput.scrollTop = messagesOutput.scrollHeight;
+        messagesOutput.prepend(messageElement);
+    }
+    // The old function now calls the new one
+    window.addMessage = function(message, type = 'info') {
+        addNewMessage(message, type);
     };
     </script>
     <div class="loading"></div>
@@ -136,7 +140,7 @@
                     <nav id="nav_hor">
                         <ul id="main-menu">
                             <li>
-                                <a><i class="fa fa-user"></i> <span id="span_menu_1"> </span> <i class="fa fa-caret-down"></i></a>
+                                <a><span id="span_menu_1"> </span> <i class="fa fa-caret-down"></i></a>
                                 <ul class="submenu">
                                     <li>
                                         <a href="#" id="menu_11"> <span id="span_menu_11"> </span> </a>
@@ -160,76 +164,10 @@
                                     </li>
                                 </ul>
                             </li>
-                            
                             <li>
-                                <a><i class="fa fa-user"></i> <span id="span_menu_3"> </span> <i class="fa fa-caret-down"></i></a>
-                                <ul class="submenu">
-                                    <li>
-                                        <a href="#" id="menu_31"> <span id="span_menu_31"> </span> </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" id="menu_32"> <span id="span_menu_32"> </span> </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a><i class="fa fa-user"></i> <span id="span_menu_4"> </span> <i class="fa fa-caret-down"></i></a>
-                                <ul class="submenu">
-                                    <li>
-                                        <a href="#configModalGlobal" data-toggle="modal" id="menu_41"> <span id="span_menu_41"> </span> </a>
-                                    </li>
-                                    <li>
-                                        <a id="menu_42"> <span id="span_menu_42"> </span> <i class="fa fa-caret-right"></i></a>
-                                        <ul class="submenu">
-                                            <li>
-                                                <a href="#" id="menu_420" role='button'> <span id="span_menu_420"> </span> </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" id="menu_421" role='button'> <span id="span_menu_421"> </span> </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" id="menu_422" role='button'> <span id="span_menu_422"> </span> </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" id="menu_423" role='button'> <span id="span_menu_423"> </span> </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" id="menu_424" role='button'> <span id="span_menu_424"> </span> </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" id="menu_429" role='button'> <span id="span_menu_429"> </span> </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="#configModal" data-toggle="modal" id="menu_43"> <span id="span_menu_43"> </span> </a>
-                                    </li>
-                                    <li>
-                                        <a id="menu_44"> <span id="span_menu_44"> </span> <i class="fa fa-caret-right"></i></a>
-                                        <ul class="submenu">
-                                            <li>
-                                                <a href="#" id="menu_441"> <span id="span_menu_441"> </span> </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" id="menu_442"> <span id="span_menu_442"> </span> </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a><i class="fa fa-user"></i> <span id="span_menu_5"> </span> <i class="fa fa-caret-down"></i></a>
-                                <ul class="submenu">
-                                    <li>
-                                        <a href="#" id="menu_51"> <span id="span_menu_51"> </span> </a>
-                                    </li>
-                                    <li>
-                                        <a href="http://www.libreduc.cc/wiki/doku.php/fr/arduino/blockly_rduino" target="_blank" id="menu_52"> <span id="span_menu_52"> </span> </a>
-                                    </li>
-                                    <li>
-                                        <a href="http://blockly.technologiescollege.fr/forum/" target="_blank" id="menu_53"> <span id="span_menu_53"> </span> </a>
-                                    </li>
-                                </ul>
+                                <a href="/tutorials.html" id="btn_menu_tutorials" target="_blank">
+                                    <span id="span_menu_tutorials">TUTORIALS</span>
+                                </a>
                             </li>
                             <li>
                                 <a href="#" id="btn_menu_about" data-toggle="modal" data-target="#aboutModal">
@@ -293,124 +231,8 @@
                 <span id="sup_debug" style="color:white"></span>
             </div>
         </div>
-        <div id="tools_blocks" class="tab-pane active">
-            <button id="btn_undo" class="btn btn-default">
-                    <span class="fa fa-undo"> </span>
-                </button>
-            <button id="btn_redo" class="btn btn-default">
-                    <span class="fa fa-repeat"> </span>
-                </button>
-            <button id="btn_block_capture" class="btn btn-default">
-                    <span id="icon_btn_block_capture" class="glyphicon glyphicon-camera"> </span>
-                    </button>
-            </div>
-        </div>
+    </div>
     <div id="mainContent">
-        <div id="menuPanel">
-            <div id="menuPanelConfig">
-                <button id="btn_configGlobal" class="btn btn-sm btn_ver btn-danger btn-block" data-toggle="modal" data-target="#configModalGlobal">
-                        <span class="glyphicon glyphicon-alert"> </span>
-                        <span id="configGlobalLabel"> </span>
-                    </button>
-                <div id="div_miniPicture">
-                    <a id="miniCard">
-                        <img id="arduino_card_miniPicture" />
-                    </a>
-                </div>
-                <button id="btn_config" class="btn btn-sm btn-warning btn-block " data-toggle="modal" data-target="#configModal">
-                        <span class="fa fa-cogs"> </span>
-                        <span id="span_config"> </span>
-                    </button>
-                <a href="#" id="btn_config_kit" target="_blank" class="btn btn-sm btn-warning btn-block hidden" role='button'>
-                    <span class="glyphicon glyphicon-th-list"> </span>
-                    <span id="span_config_kit"> </span>
-                </a>
-            </div>
-            <div id="menuPanelBlockly" class="margin-top-5">
-                <ul id="ul_nav" role="tablist">
-                    <li role="presentation" id="tab_supervision" class="disabled">
-                        <a href="https://github.com/technologiescollege/BlocklyArduino_AIO" target="_blank">
-                            <span class="glyphicon glyphicon-transfer"></span>
-                            <span id="a_supervision"> </span>
-                        </a>
-                    </li>
-                    <li role="presentation" id="tab_blocks" class="active">
-                        <a href="#content_blocks" aria-controls="content_blocks" role="tab" data-toggle="tab">
-                            <span class="fa fa-puzzle-piece"></span>
-                            <span id="a_blocks"> </span>
-                        </a>
-                    </li>
-                    <li role="presentation" id="tab_arduino">
-                        <a href="#content_arduino" aria-controls="content_arduino" role="tab" data-toggle="tab">
-                            <span class="fa fa-code"></span>
-                            <!--span class="glyphicon glyphicon-education"></span-->
-                            <span id="a_arduino"></span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div id="menuPanelFiles">
-                <a id="btn_saveXML" class='btn btn-sm btn-success btn-block' href="#" role='button'>
-                    <span class="fas fa-cloud-download-alt"></span>
-                    <span id="span_saveXML"> </span>
-                </a>
-                <button id="btn_fakeload" class="btn btn-sm btn-success btn-block" accept="*.B@, *.xml">
-                        <span class="fas fa-cloud-upload-alt"></span>
-                        <span id="span_fakeload"> </span>
-                    </button>
-                <button id="btn_example" class="btn btn-sm btn-info btn-block" data-toggle="modal" data-target="#exampleModal">
-                        <span class="glyphicon glyphicon-list-alt"> </span>
-                        <span id="span_example"> </span>
-                    </button>
-                <a id="btn_create_example" class="btn btn-sm btn_ver btn-info btn-block" href="#" target="_blank" role='button'>
-                    <span class="glyphicon glyphicon-wrench"> </span>
-                    <span id="span_create_example"> </span>
-                </a>
-            </div>
-            <input type="file" id="load" accept=".B@, .xml" style="display: none;" />
-            <div id="div_tools_button">
-                <button id="btn_wiring" class="btn btn-primary">
-                        <span class="fa fa-plug"></span>
-                    </button>
-                <br />
-                <br />
-                <button id="btn_factory" class="btn btn-sm btn-primary">
-                        <span class="fa fa-industry"> </span>
-                    </button>
-                <button id="btn_screenduino" class="btn btn-sm btn-primary">
-                        <span class="glyphicon glyphicon-th"> </span>
-                    </button>
-                <button id="btn_RGB" class="btn btn-sm btn-primary">
-                        <span class="fas fa-palette"> </span>
-                    </button>
-                <button id="btn_convert" class="btn btn-sm btn-primary">
-                        <span class="glyphicon glyphicon-superscript"> </span>
-                    </button>
-                <br />
-                <br />
-                <button id="btn_miniMenuPanel" class="btn btn-sm btn-default">
-                        <span class="glyphicon glyphicon-step-backward"> </span>
-                    </button>
-                <a href="./index.html" id="btn_reset" class="btn btn-sm btn-danger">
-                    <span class="glyphicon glyphicon-off"> </span>
-                </a>
-                <br />
-                <br />
-                <div id="div_about">
-                    <button id="btn_about" type="button" class="btn btn-default btn-sm btn-success" data-toggle="modal" data-target="#aboutModal">
-                            <span id="span_about"> </span>
-                            <span class="glyphicon glyphicon-user"></span>
-                        </button>
-                </div>
-                <br />
-                <div id="div_paypal">
-                    <button id="btn_about" type="button" class="btn btn-default btn-sm btn-danger" data-toggle="modal" data-target="#paypalModal">
-                            <span id="span_about"> </span>
-                            <span class="glyphicon glyphicon-euro"></span>
-                        </button>
-                </div>
-            </div>
-        </div>
         <!-- Nav tabs -->
         <div id="divTabpanel" role="tabpanel">
             <!-- Tab panes -->
@@ -814,7 +636,7 @@
         <div class="modal-content" style="background: #ffcccc;">
           <div class="modal-header">
             <h5 class="modal-title" id="backendWarningLabel" style="color: #900;">
-              ⚠️ Backend server not reachable
+               Backend server not reachable
             </h5>
           </div>
           <div class="modal-body" style="color: #900;">
@@ -1145,17 +967,6 @@
             });
         }
 
-        // Function to add a message to the messages monitor
-        window.addMessage = function(message, type = 'info') {
-            var messagesOutput = document.getElementById('messagesOutput');
-            if (!messagesOutput) return;
-            var messageElement = document.createElement('div');
-            messageElement.className = `message ${type}`;
-            messageElement.textContent = message;
-            messagesOutput.appendChild(messageElement);
-            messagesOutput.scrollTop = messagesOutput.scrollHeight;
-        };
-
         // Initialize with messages tab active
         switchTab('messages');
         
@@ -1436,8 +1247,8 @@
           <div class="modal-body">
             <div class="boards-grid">
               <div class="board-card">
-                <img src="media/new_boards/esp32.png" alt="ESP32">
-                <div class="board-label">ESP32</div>
+                <img src="media/new_boards/sky.png" alt="Skyrover">
+                <div class="board-label">Skyrover</div>
               </div>
               <div class="board-card selected">
                 <img src="media/new_boards/arduino_uno.png" alt="Arduino Uno">
@@ -1452,29 +1263,17 @@
                 <div class="board-label">Arduino Nano</div>
               </div>
               <div class="board-card">
-                <img src="media/new_boards/raspberry_pico.png" alt="Raspberry Pico">
-                <div class="board-label">Raspberry Pico</div>
+                <img src="media/new_boards/esp32.png" alt="ESP 32">
+                <div class="board-label">ESP 32</div>
               </div>
               <div class="board-card">
-                <img src="media/new_boards/raspberry_pico2.png" alt="Raspberry Pico">
-                <div class="board-label">Raspberry Pico</div>
-              </div>
-              <div class="board-card">
-                <img src="media/new_boards/microbit_v2.png" alt="Micro:Bit V2">
-                <div class="board-label">Micro:Bit V2</div>
-              </div>
-              <div class="board-card">
-                <img src="media/new_boards/microbit_v2b.png" alt="Micro:Bit V2">
-                <div class="board-label">Micro:Bit V2</div>
-              </div>
-              <div class="board-card">
-                <img src="media/new_boards/raspberry_pi.png" alt="Raspberry Pi">
-                <div class="board-label">Raspberry Pi</div>
+                <img src="media/new_boards/image-2.png" alt="Node MCU">
+                <div class="board-label">Node MCU</div>
               </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
           </div>
         </div>
       </div>

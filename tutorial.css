@@ -1,0 +1,163 @@
+/* General Body & Container Styles */
+body {
+    background-color: #f4f7f6;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #444;
+}
+
+.container {
+    max-width: 1100px;
+    padding: 20px;
+}
+
+/* Header Styles */
+.tutorials-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.tutorials-header h1 {
+    color: #990099;
+    margin: 0;
+    font-size: 2.5em;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.tutorials-header .fa-graduation-cap {
+    margin-right: 15px;
+    font-size: 0.9em;
+}
+
+.header-buttons .btn {
+    margin-left: 10px;
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 8px 16px;
+    transition: all 0.2s ease-in-out;
+}
+
+.header-buttons .btn-info {
+    background-color: #5bc0de;
+    border-color: #46b8da;
+    color: white;
+}
+
+.header-buttons .btn-info:hover {
+    background-color: #31b0d5;
+    border-color: #269abc;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.header-buttons .btn-primary {
+    background-color: #990099;
+    border-color: #990099;
+}
+
+.header-buttons .btn-primary:hover {
+    background-color: #7c007e;
+    border-color: #7c007e;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Tutorial Category Cards */
+.tutorial-category {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.tutorial-category:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(153, 0, 153, 0.08);
+}
+
+.tutorial-category h2 {
+    color: #990099;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 15px;
+}
+
+.list-group-item {
+    border: none;
+    padding: 0;
+    margin-bottom: 12px;
+}
+
+.tutorial-link {
+    color: #555;
+    text-decoration: none;
+    display: block;
+    padding: 12px 15px;
+    transition: all 0.2s ease-in-out;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    background-color: #fafafa;
+}
+
+.tutorial-link:hover {
+    color: #990099;
+    background-color: #f8f5ff;
+    border-color: #c5a3d9;
+    transform: translateX(5px);
+}
+
+.tutorial-link i {
+    margin-right: 12px;
+    width: 22px;
+    text-align: center;
+    color: #990099;
+    font-size: 1.1em;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .tutorials-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tutorials-header h1 {
+        margin-bottom: 20px;
+    }
+
+    .header-buttons {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    .header-buttons .btn {
+        margin-left: 0;
+        margin-right: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .tutorial-category {
+        padding: 20px;
+    }
+
+    .header-buttons {
+        flex-direction: column;
+    }
+
+    .header-buttons .btn {
+        width: 100%;
+        margin-bottom: 10px;
+        margin-right: 0;
+    }
+} 

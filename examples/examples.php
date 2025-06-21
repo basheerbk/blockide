@@ -4,7 +4,7 @@ session_start();
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Examples Blockly@rduino</title>
+<title>Examples Skyrover.ai</title>
 <script type="text/javascript" src="../libs/jquery-2.1.3.min.js"></script>
 <script type="text/javascript" src="../libs/bootstrap.min.3.3.6.js"></script>
 <script type="text/javascript" src="../libs/bootstrap-toggle.min.js"></script>
@@ -17,44 +17,22 @@ session_start();
 
 <body>
 <div class="container-fluid">
-<!--cryptage MD5 : defaut : admin_Blockly@rduino -->
+<!--cryptage MD5 : defaut : admin_Skyrover.ai -->
 <?php
-$password = '2a95736f769ebba8323a30fe467d6da8';
-
-if (!isset($_SESSION['connected']) 
-	&& isset($_POST['password']) 
-	&& md5($_POST['password']) == $password) {
-     $_SESSION['connected'] = 'ok';
+$password = "c954c23ab263a2a164b4c6e95459ED28";
+$valider = $_POST['valider'];
+$pass = $_POST['pass'];
+if ($valider) {
+	if (md5($pass) == $password) {
+		echo "bravo, le mot de passe est OK";
+		//on cree un cookie
+		setcookie("pass_OK", "pass_OK", time()+86400); // 1 journée
+		header("location: examples.php");
+	} else {
+		echo "le mot de passe est incorrect";
+	}
 }
-
-if (!isset($_SESSION['connected'])) {
-?>
-<div class="text-center">
-<div class="row margin-top-10">
-	<div class="col-xs-10 col-xs-offset-1 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
-		<div class="panel panel-primary">
-			<div class="panel-heading">Connection</div>
-			<div class="panel-body">
-				<form class="form-horizontal" action="" method="POST">
-					<div class="form-group">
-						<label for="password" class="col-xs-4 control-label">Password</label>
-						<div class="col-xs-8">
-							<input type="password" class="form-control" id="password" name="password">
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-xs-offset-4">
-							<button type="submit" class="btn btn-success">OK</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
-</div>
-<?php
-} else  {
+if ((isset($_COOKIE['pass_OK'])) && ($_COOKIE['pass_OK'] == "pass_OK")) {
 $path = './';
 
 $directory = new RecursiveDirectoryIterator($path,RecursiveDirectoryIterator::SKIP_DOTS);
@@ -314,4 +292,3 @@ Examples.initServer();
 </script>
 </body>
 </html>
-<?php }?>

@@ -40,7 +40,7 @@ var MSG = {
   span_flash_local: " Прехвърляне към платката",
   span_flash_local_result: " Резултат от прехвърлянето",
   span_detailedCompilation: " Подробни реултати",
-  firstModalLabel: "Добер дошли в Blockly@rduino!",
+  firstModalLabel: "Добре дошли в Skyrover.ai!",
   span_first_msg: "Не показвай това съобщение отново ",
   btn_valid_first_msg: "OK",
   exampleModalLabel: "избери пример",
@@ -108,12 +108,10 @@ var MSG = {
   verification_failed:"Проверката е неуспешна. Грешка : ",
   arduino_card:"Изтрий всичко и избери платка",
   span_about:"Относно",
-  aboutModalLabel:"Относно Blockly@rduino",
-  aboutBody:"<br />Разработено от Sébastien Canet(<a href='mailto:sebastien.canet@ac-nantes.fr' traget=_blank>sebastien.canet@ac-nantes.fr</a>), с помощта на Olivier Metayer, <b>и с благодарност към всички сътрудници (запознайте се с тях във форума за разработка)!</b>"
-	+ "<br />"
-	+ "<br />Благодарение на:",
-  paypalModalLabel:"Подкрепете безплатния софтуер!",
-  paypalBody:"Благодарим Ви, че направихте дарение, за да помогнете за развитието и подобряването на този софтуер, БЕЗ ВАС БЕЗПЛАТНИЯ СОФТУЕР НЕ МОЖЕ ДА ОЖЕЛЕЕ!"
+  aboutModalLabel:"Относно Skyrover.ai",
+  aboutBody:"<p><b>Skyrover.ai</b> is a visual programming editor designed to make coding for Arduino and other microcontrollers accessible and fun for everyone. Our block-based interface allows you to create, compile, and upload code to your hardware seamlessly, empowering you to bring your creative projects to life.</p><p>This project is open source and built on the hard work of the Blockly and Arduino communities. We are grateful for their foundational contributions.</p>",
+  paypalModalLabel:"Помогнете на безплатния софтуер!",
+  paypalBody:"Благодарим Ви, че направихте дарение, за да подпомогнете развитието и подобряването на този софтуер, БЕЗ ВАС БЕЗПЛАТНИЯТ СОФТУЕР НЕ МОЖЕ ДА ОЦЕЛИ!"
 	+ "<br />"
 	+ "<br />УЧИТЕЛИ & АСОЦИАЦИИ"
 	+ "<br />можете да заявите фактира (<a href='mailto:scanet@libreduc.cc' traget=_blank>scanet@libreduc.cc</a>) за Вашата организация ако направите официално 'дарение' чрез банков превод. Не таксувам лиценз, но разчитам на вас да помогнете със сумата, на която оценявате този проект.",

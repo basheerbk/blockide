@@ -40,7 +40,7 @@ var MSG = {
   span_flash_local: " Transfereix a la targeta",
   span_flash_local_result: " Resultat de la descarrega",
   span_detailedCompilation: " Resultats detallats",
-  firstModalLabel: "Benvingut a Blockly@rduino !",
+  firstModalLabel: "Benvingut a Skyrover.ai !",
   span_first_msg: "Marca per no veure més aquest missatge",
   btn_valid_first_msg: "Ho he entés",
   exampleModalLabel: "Tria un exemple",
@@ -93,7 +93,7 @@ var MSG = {
   btn_size_min:"Redueix la finestra",
   btn_size_max:"Fes gran la finestra",
   btn_preview:"Vista prèvia del codi",
-  btn_inline:"Commuta l’orientació dels blocs",
+  btn_inline:"Commuta l'orientació dels blocs",
   httpRequestError: "Hi ha un problema amb la petició.",
   linkAlert: "Compartiu els blocs amb aquest enllaç:\n\n%1",
   hashError: " '%1' no correspon a cap programa desat.",
@@ -102,30 +102,16 @@ var MSG = {
   timeout: "S'ha superat el nombre màxim d'iteracions d'execució.",
   badCode: "Error del programa :\n%1",
   discard: "Voleu suprimir tots els blocs (%1 blocs) ?",
-  badXml: "Error d’anàlisi de XML :\n%1\n\nSeleccioneu 'OK' per abandonar les vostres modificacions o 'Anul·la' per continuar i modificar el XML.",
+  badXml: "Error d'anàlisi de XML :\n%1\n\nSeleccioneu 'OK' per abandonar les vostres modificacions o 'Anul·la' per continuar i modificar el XML.",
   pre_verify:"Verificació en curs... ",
   verification_succeed: "Verificació acabada amb èxit, mida de la memòria : ",
   verification_failed:"La verificació ha fracassat, l'error és : ",
   arduino_card:"Suprimeix tot i selecciona una targeta",
   span_about:"Quant a",
   aboutModalLabel:"Quanta a ...",
-  aboutBody:"<br />- Desenvolupat per Sébastien Canet (<a href='mailto:sebastien.canet@ac-nantes.fr' traget=_blank>sebastien.canet@ac-nantes.fr</a>), ajudat per Olivier Métayer, gràcies a tots els contribuidors per correu o pel fòrum !" 
-	+ "<br />"
-	+ "<br />S'ajuda de :",
+  aboutBody:"<p><b>Skyrover.ai</b> is a visual programming editor designed to make coding for Arduino and other microcontrollers accessible and fun for everyone. Our block-based interface allows you to create, compile, and upload code to your hardware seamlessly, empowering you to bring your creative projects to life.</p><p>This project is open source and built on the hard work of the Blockly and Arduino communities. We are grateful for their foundational contributions.</p>",
   msg_ajax_ko:"Les sol·licituds de AJAX no són compatibles amb el vostre navegador, ni les funcionalitats\n"
 	+ "següènts no seran operacionals : \n"
-	+ "- carregament de blocs via URL \n"
-	+ "- supervisió\n"
-	+ "\n\n"
-	+ "Seguiu les instruccions de la pàgina següent :\n"
-	+ "http://testingfreak.com/how-to-fix-cross-origin-request-security-cors-error-in-firefox-chrome-and-ie/\n",
-  paypalModalLabel:"Ajudeu el programari lliure !",
-  paypalBody:"Si us plau, feu una donació per ajudar a desenvolupar i millorar aquest programari, SENSE VOSALTRES EL PROGRAMARI LLIURE NO POT SOBREVIURE !" 
-	+ "<br />"
-	+ "<br />PROFESSORS I ASSOCIACIONS"
-	+ "<br />Em podeu demanar una factura (<a href='mailto:scanet@libreduc.cc' traget=_blank>scanet@libreduc.cc</a>), per tal que la vostra estructura en pugui fer una 'donació' oficial per transferència bancària. No cobro una llicència, però compto amb vosaltres per ajudar-nos a l’import en què calculeu aquest treball.",
-  msg_ajax_ko:"Les sol·licituds de AJAX no són compatibles amb el vostre navegador, ni les funcionalitats\n"
-	+ "suivantes ne seront pas opérationnelles : \n"
 	+ "- carregament de blocs via URL \n"
 	+ "- supervisió\n"
 	+ "\n\n"
@@ -172,4 +158,16 @@ var MSG = {
   varText3:"'\n",
   varText4:"i aquest bloc intenta canviar el tipus '",
   varText5:"'!",
+  paypalModalLabel:"Ajudeu els programaris lliures !",
+  paypalBody:"Gràcies per fer una donació per ajudar al desenvolupament i a la millora d'aquest programari, SENSE VOSALTRES ELS PROGRAMARIS LLIURES NO PODEN SOBREVIURE !" 
+	+ "<br />"
+	+ "<br />PROFESSORS I ASSOCIACIONS"
+	+ "<br />Em podeu demanar una factura (<a href='mailto:scanet@libreduc.cc' traget=_blank>scanet@libreduc.cc</a>), per tal que la vostra estructura en pugui fer una 'donació' oficial per transferència bancària. No cobro una llicència, però compto amb vosaltres per ajudar-nos a l'import en què calculeu aquest treball.",
+  msg_ajax_ko:"Les sol·licituds de AJAX no són compatibles amb el vostre navegador, ni les funcionalitats\n"
+	+ "suivantes ne seront pas opérationnelles : \n"
+	+ "- carregament de blocs via URL \n"
+	+ "- supervisió\n"
+	+ "\n\n"
+	+ "Seguiu les instruccions de la pàgina següent :\n"
+	+ "http://testingfreak.com/how-to-fix-cross-origin-request-security-cors-error-in-firefox-chrome-and-ie/\n",  
 };

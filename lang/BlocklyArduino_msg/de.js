@@ -40,7 +40,7 @@ var MSG = {
   span_flash_local: " Programm auf Arduino / Peguino übertragen",
   span_flash_local_result: " Upload Ergebnis",
   span_detailedCompilation: " Detaillierte Ergebnisse",
-  firstModalLabel: "Willkommen zu Blockly@rduino!",
+  firstModalLabel: "Willkommen zu Skyrover.ai!",
   span_first_msg: "Diese Nachricht beim nächstenmal ausblenden ",
   btn_valid_first_msg: "OK",
   exampleModalLabel: "Beispiel auswählen",
@@ -105,12 +105,10 @@ var MSG = {
   verification_failed:"Überprüfung fehlgeschlagen. Fehlermeldung: ",
   arduino_card:"Alles löschen und neu starten...",
   span_about:"Info",
-  aboutModalLabel:"Mehr über Blockly@rduino",
-  aboutBody:"<br />- Entwicklung und Modifikationen von Sébastien Canet(<a href='mailto:sebastien.canet@ac-nantes.fr' traget=_blank>sebastien.canet@ac-nantes.fr</a>), Ergänzungen der CSS und JS Funktionen von Olivier Metayer, <b>und danke an alle Unterstützer und insbesondere an alle, die an der Entstehung mitgewirkt haben!</b>"
-	+ "<br />"
-	+ "<br />Vielen Dank auch an:",
-  paypalModalLabel:"Help free software!",
-  paypalBody:"Thank you for making a donation to help development and improvement of this software, WITHOUT YOU FREE SOFTWARE CANNOT SURVIVE!" 
+  aboutModalLabel:"Mehr über Skyrover.ai",
+  aboutBody:"<p><b>Skyrover.ai</b> is a visual programming editor designed to make coding for Arduino and other microcontrollers accessible and fun for everyone. Our block-based interface allows you to create, compile, and upload code to your hardware seamlessly, empowering you to bring your creative projects to life.</p><p>This project is open source and built on the hard work of the Blockly and Arduino communities. We are grateful for their foundational contributions.</p>",
+  paypalModalLabel:"Hilf freier Software!",
+  paypalBody:"Danke für deine Spende zur Weiterentwicklung dieser Software, DENN OHNE DICH KANN FREIE SOFTWARE NICHT ÜBERLEBEN!" 
 	+ "<br />"
 	+ "<br />TEACHERS & ASSOCIATIONS"
 	+ "<br />you can also ask me for an invoice (<a href='mailto:scanet@libreduc.cc' traget=_blank>scanet@libreduc.cc</a>) for your organization give me an official 'donation' by bank transfer. I do not charge a license but I count on you to help the amount you value this work.",

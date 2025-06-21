@@ -40,7 +40,7 @@ var MSG = {
   span_flash_local: " Transferência para o Conselho",
   span_flash_local_result: " Resultado da transferência",
   span_detailedCompilation: " Resultados detalhados",
-  firstModalLabel: "Bem-vindo ao Blockly@rduino!",
+  firstModalLabel: "Bem-vindo ao Skyrover.ai!",
   span_first_msg: "Não veja esta mensagem novamente ",
   btn_valid_first_msg: "OK",
   exampleModalLabel: "escolha um exemplo",

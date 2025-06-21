@@ -40,7 +40,7 @@ var MSG = {
   span_flash_local: " Transfer to the Board",
   span_flash_local_result: " Result of transfer",
   span_detailedCompilation: " Detailed results",
-  firstModalLabel: "Welcome to Blockly@rduino!",
+  firstModalLabel: "Welcome to Skyrover.ai!",
   span_first_msg: "Don't see this message again ",
   btn_valid_first_msg: "OK",
   exampleModalLabel: "choose an example",
@@ -108,10 +108,8 @@ var MSG = {
   verification_failed:"Verification failed. Error : ",
   arduino_card:"Delete all and select a Board",
   span_about:"About",
-  aboutModalLabel:"About Blockly@rduino",
-  aboutBody:"<br />Development by Sébastien Canet(<a href='mailto:sebastien.canet@ac-nantes.fr' traget=_blank>sebastien.canet@ac-nantes.fr</a>), helped by Olivier Metayer, <b>thanks to all contributors (meet them at the developer forum)!</b>"
-	+ "<br />"
-	+ "<br />Thanks to:",
+  aboutModalLabel:"About Skyrover.ai",
+  aboutBody:"<p><b>Skyrover.ai</b> is a visual programming editor designed to make coding for Arduino and other microcontrollers accessible and fun for everyone. Our block-based interface allows you to create, compile, and upload code to your hardware seamlessly, empowering you to bring your creative projects to life.</p><p>This project is open source and built on the hard work of the Blockly and Arduino communities. We are grateful for their foundational contributions.</p>",
   paypalModalLabel:"Help free software!",
   paypalBody:"Thank you for making a donation to help development and improvement of this software, WITHOUT YOU FREE SOFTWARE CANNOT SURVIVE!" 
 	+ "<br />"
@@ -126,7 +124,7 @@ var MSG = {
 	+ "http://testingfreak.com/how-to-fix-cross-origin-request-security-cors-error-in-firefox-chrome-and-ie/\n",
   span_ajax_msg:"Do not show this message again",
   span_forms:"USERS, WHO ARE YOU?",
-  span_menu_1:"Projects",
+  span_menu_1:"Files",
   span_menu_11:"Open...",
   span_menu_12:"Save as...",
   span_menu_13:"Examples",
@@ -165,4 +163,6 @@ var MSG = {
   varText3:"' type\n",
   varText4:"and this block tries to assign the type '",
   varText5:"'!",
+  variableModalLabel:"Declare a new variable...",
+  cardLabel:"Board selection",
 };

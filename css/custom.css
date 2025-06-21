@@ -1046,14 +1046,16 @@ nav a:hover {
   width: 900px;
   max-width: 98vw;
   min-width: 600px;
-  height: 650px;
   max-height: 98vh;
   margin: 30px auto;
 }
 #boardsModal .modal-content {
-  height: 100%;
-  min-height: 500px;
+  display: flex;
+  flex-direction: column;
   max-height: 98vh;
+}
+#boardsModal .modal-body {
+  flex-grow: 1;
   overflow-y: auto;
 }
 @media (max-width: 1000px) {
@@ -1157,4 +1159,138 @@ nav a i[class*="caret"] {
 #sideSerialControls #btn_boards_modal,
 #sideSerialControls #side_serialport {
   font-weight: 600 !important;
+}
+
+/* Fix for Tutorials and About button hover/focus color */
+#btn_menu_tutorials:hover, #btn_menu_tutorials:focus,
+#btn_menu_about:hover, #btn_menu_about:focus {
+  background: #b300b3 !important;
+  color: #fff !important;
+}
+
+/* Tutorial Modal Styles */
+#tutorialsModal .modal-dialog {
+  width: 800px;
+  max-width: 90vw;
+}
+
+#tutorialsModal .modal-content {
+  border-radius: 8px;
+}
+
+#tutorialsModal .modal-header {
+  background: linear-gradient(135deg, #990099, #b300b3);
+  color: white;
+  border-radius: 8px 8px 0 0;
+}
+
+#tutorialsModal .modal-header h4 {
+  color: white;
+  margin: 0;
+}
+
+#tutorialsModal .modal-header .fa-graduation-cap {
+  margin-right: 10px;
+  font-size: 1.2em;
+}
+
+#tutorialsModal .modal-body {
+  padding: 20px;
+}
+
+#tutorialsModal h5 {
+  color: #990099;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 8px;
+}
+
+#tutorialsModal h5:first-child {
+  margin-top: 0;
+}
+
+#tutorialsModal .list-group {
+  margin-bottom: 25px;
+}
+
+#tutorialsModal .list-group-item {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
+}
+
+#tutorialsModal .list-group-item:hover {
+  border-color: #990099;
+  background-color: #f8f5ff;
+  transform: translateX(5px);
+}
+
+#tutorialsModal .tutorial-link {
+  color: #333;
+  text-decoration: none;
+  display: block;
+  padding: 8px 0;
+  transition: color 0.2s ease;
+}
+
+#tutorialsModal .tutorial-link:hover {
+  color: #990099;
+  text-decoration: none;
+}
+
+#tutorialsModal .tutorial-link i {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+  color: #990099;
+}
+
+#tutorialsModal .modal-footer {
+  border-top: 1px solid #e0e0e0;
+  padding: 15px 20px;
+}
+
+#tutorialsModal .btn-primary {
+  background-color: #990099;
+  border-color: #990099;
+}
+
+#tutorialsModal .btn-primary:hover {
+  background-color: #7c007e;
+  border-color: #7c007e;
+}
+
+#tutorialsModal .btn-info {
+  background-color: #5bc0de;
+  border-color: #46b8da;
+  color: white;
+}
+
+#tutorialsModal .btn-info:hover {
+  background-color: #31b0d5;
+  border-color: #269abc;
+  color: white;
+}
+
+/* Responsive adjustments for tutorial modal */
+@media (max-width: 768px) {
+  #tutorialsModal .modal-dialog {
+    width: 95vw;
+    margin: 10px auto;
+  }
+  
+  #tutorialsModal .modal-body {
+    padding: 15px;
+  }
+  
+  #tutorialsModal h5 {
+    font-size: 1.1em;
+  }
+  
+  #tutorialsModal .tutorial-link {
+    font-size: 0.95em;
+  }
 }

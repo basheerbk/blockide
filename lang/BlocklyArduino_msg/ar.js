@@ -39,7 +39,7 @@ var MSG =  {
   span_flash_local: "التحميل إلى المتحكم الدقيق",
   span_flash_local_result: "نتيجة التحميل",
   span_detailedCompilation: "نتائج مفصلة",
-  firstModalLabel:  "مرحبًا بك في Blockly@rduino!",
+  firstModalLabel:  "مرحبًا بك في Skyrover.ai!",
   span_first_msg: "أنقر لتجنب رؤية هذه الرسالة مرة أخرى",
   btn_valid_first_msg: "أفهمك ، شكرًا",
   exampleModalLabel: "اختيار مثال",

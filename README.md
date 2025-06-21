@@ -1,4 +1,4 @@
-# Blockly@rduino IDE
+# Blockcode IDE
 
 A web-based Arduino programming environment using Google's Blockly visual programming language.
 

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorials - Skyrover.ai</title>
+    <link rel="icon" type="image/png" href="favicon.png" />
+    
+    <!-- Bootstrap, FontAwesome, and Custom Tutorial CSS -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.BlocklyArduino.css" />
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
+    <link rel="stylesheet" href="tutorial.css">
+</head>
+<body>
+
+<div class="container">
+    <header class="tutorials-header">
+        <h1><span class="fa fa-graduation-cap"></span> Tutorials</h1>
+        <div class="header-buttons">
+            <a href="http://www.libreduc.cc/wiki/doku.php/fr/arduino/blockly_rduino" target="_blank" class="btn btn-info">
+                <i class="fa fa-wikipedia-w"></i> Wiki
+            </a>
+            <a href="http://blockly.technologiescollege.fr/forum/" target="_blank" class="btn btn-info">
+                <i class="fa fa-comments"></i> Forum
+            </a>
+            <a href="https://github.com/basheerbk/blockide/tree/main/documentation" target="_blank" class="btn btn-primary">
+                <i class="fa fa-book"></i> Documentation
+            </a>
+        </div>
+    </header>
+
+    <div class="row">
+        <!-- Getting Started Category -->
+        <div class="col-md-4">
+            <div class="tutorial-category">
+                <h2>Getting Started</h2>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <a href="#" class="tutorial-link" data-tutorial="basics">
+                            <i class="fa fa-play-circle"></i> Basic Arduino Programming
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="#" class="tutorial-link" data-tutorial="blocks">
+                            <i class="fa fa-puzzle-piece"></i> Understanding Blockly Blocks
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="#" class="tutorial-link" data-tutorial="first-project">
+                            <i class="fa fa-lightbulb-o"></i> Your First LED Project
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Intermediate Category -->
+        <div class="col-md-4">
+            <div class="tutorial-category">
+                <h2>Intermediate</h2>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <a href="#" class="tutorial-link" data-tutorial="sensors">
+                            <i class="fa fa-thermometer-half"></i> Working with Sensors
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="#" class="tutorial-link" data-tutorial="motors">
+                            <i class="fa fa-cog"></i> Controlling Motors
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="#" class="tutorial-link" data-tutorial="serial">
+                            <i class="fa fa-exchange"></i> Serial Communication
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Advanced Category -->
+        <div class="col-md-4">
+            <div class="tutorial-category">
+                <h2>Advanced Topics</h2>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <a href="#" class="tutorial-link" data-tutorial="wifi">
+                            <i class="fa fa-wifi"></i> WiFi and IoT Projects
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="#" class="tutorial-link" data-tutorial="robotics">
+                            <i class="fa fa-robot"></i> Robotics Projects
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="#" class="tutorial-link" data-tutorial="custom-blocks">
+                            <i class="fa fa-code"></i> Creating Custom Blocks
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS for Bootstrap components -->
+<script src="core/libs/jquery-2.1.3.min.js"></script>
+<script src="core/libs/bootstrap.min.3.3.6.js"></script>
+<script>
+// Tutorial Modal Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Tutorial content data
+    const tutorials = {
+        'basics': { title: 'Basic Arduino Programming', content: `<h4>Getting Started with Arduino</h4><p>Arduino is an open-source electronics platform based on easy-to-use hardware and software. It's intended for anyone making interactive projects.</p><h5>Key Concepts:</h5><ul><li><strong><code>setup()</code>:</strong> This function is called when a sketch starts. Use it to initialize variables, pin modes, start using libraries, etc. The <code>setup()</code> function will only run once, after each powerup or reset of the Arduino board.</li><li><strong><code>loop()</code>:</strong> After creating a <code>setup()</code> function, the <code>loop()</code> function does precisely what its name suggests, and loops consecutively, allowing your program to change and respond. Use it to actively control the Arduino board.</li><li><strong>Digital Pins:</strong> Can be either HIGH (5V) or LOW (0V). Used for simple on/off signals.</li><li><strong>Analog Pins:</strong> Can read a range of values (typically 0-1023), useful for reading sensors.</li></ul>`},
+        'blocks': { title: 'Understanding Blockly Blocks', content: `<h4>How Blockly Works</h4><p>Blockly uses visual blocks that snap together to create programs, making coding more accessible and intuitive.</p><h5>Block Types:</h5><ul><li><strong>Logic Blocks:</strong> Control the flow of your program with if/else statements and loops.</li><li><strong>Math Blocks:</strong> Perform a wide range of mathematical operations.</li><li><strong>Text Blocks:</strong> Manipulate strings of text for display or processing.</li><li><strong>Variable Blocks:</strong> Create and manage variables to store data.</li><li><strong>Arduino-Specific Blocks:</strong> Directly control the hardware, such as reading from sensors or writing to pins.</li></ul><p>Experiment by dragging blocks from the toolbox on the left into the workspace and connecting them!</p>`},
+        'first-project': { title: 'Your First LED Project', content: `<h4>LED Blink Tutorial</h4><p>This is the "Hello, World!" of microcontrollers. It's a simple project to confirm that your board is working and that you understand the basics of uploading code.</p><h5>Steps:</h5><ol><li><strong>Hardware:</strong> Connect an LED to pin 13 on your Arduino board. The longer leg (anode) goes to the pin, and the shorter leg (cathode) connects to ground (GND), usually with a 220Ω resistor in between.</li><li><strong>Code:</strong> Use the "Digital Write" block to set pin 13 to HIGH.</li><li>Add a "Delay" block and set it to 1000 milliseconds (1 second).</li><li>Add another "Digital Write" block to set pin 13 to LOW.</li><li>Add another "Delay" block for 1000ms.</li><li>Place these blocks inside the "loop" block.</li></ol><p>Upload the code, and your LED should start blinking!</p>`},
+        // Add more detailed content for other tutorials
+        'sensors': { title: 'Working with Sensors', content: `Content for working with sensors...`},
+        'motors': { title: 'Controlling Motors', content: `Content for controlling motors...`},
+        'serial': { title: 'Serial Communication', content: `Content for serial communication...`},
+        'wifi': { title: 'WiFi and IoT Projects', content: `Content for WiFi and IoT projects...`},
+        'robotics': { title: 'Robotics Projects', content: `Content for robotics projects...`},
+        'custom-blocks': { title: 'Creating Custom Blocks', content: `Content for creating custom blocks...`}
+    };
+
+    // Handle tutorial link clicks
+    document.querySelectorAll('.tutorial-link').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const tutorialId = this.getAttribute('data-tutorial');
+            const tutorialData = tutorials[tutorialId];
+            if (tutorialData) {
+                showTutorialModal(tutorialData.title, tutorialData.content);
+            }
+        });
+    });
+    
+    // Function to show tutorial content in a modal
+    function showTutorialModal(title, content) {
+        // First, remove any existing modal to prevent conflicts
+        const existingModal = document.getElementById('tutorialContentModal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+
+        const tutorialModalHTML = `
+            <div class="modal fade" id="tutorialContentModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg"><div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">${title}</h4>
+                    </div>
+                    <div class="modal-body">${content}</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div></div>
+            </div>`;
+        
+        document.body.insertAdjacentHTML('beforeend', tutorialModalHTML);
+        $('#tutorialContentModal').modal('show');
+        $('#tutorialContentModal').on('hidden.bs.modal', function() {
+            $(this).remove();
+        });
+    }
+});
+</script>
+
+</body>
+</html> 

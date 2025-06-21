@@ -40,7 +40,7 @@ var MSG = {
   span_flash_local: " 基板に転送",
   span_flash_local_result: " 転送結果",
   span_detailedCompilation: " 結果詳細",
-  firstModalLabel: "Blockly@rduino にようこそ !",
+  firstModalLabel: "Skyrover.ai にようこそ !",
   span_first_msg: "次回から表示させない ",
   btn_valid_first_msg: "OK",
   exampleModalLabel: "サンプルを選ぶ",
@@ -108,15 +108,10 @@ var MSG = {
   verification_failed:"検証失敗. エラー : ",
   arduino_card:"全てを消去してボードを選択",
   span_about:"About",
-  aboutModalLabel:"Blockly@rduinoについて",
-  aboutBody:"<br />開発者： セバスチャン　キャネ(<a href='mailto:sebastien.canet@ac-nantes.fr' traget=_blank>sebastien.canet@ac-nantes.fr</a>), helped by Olivier Metayer, <b>thanks to all contributors (meet them at the developer forum)!</b>"
-	+ "<br />"
-	+ "<br />Thanks to:",
-  paypalModalLabel:"Help free software!",
-  paypalBody:"Thank you for making a donation to help development and improvement of this software, WITHOUT YOU FREE SOFTWARE CANNOT SURVIVE!" 
-	+ "<br />"
-	+ "<br />TEACHERS & ASSOCIATIONS"
-	+ "<br />you can also ask me for an invoice (<a href='mailto:scanet@libreduc.cc' traget=_blank>scanet@libreduc.cc</a>) for your organization give me an official 'donation' by bank transfer. I do not charge a license but I count on you to help the amount you value this work.",
+  aboutModalLabel:"Skyrover.aiについて",
+  aboutBody:"<p><b>Skyrover.ai</b> is a visual programming editor designed to make coding for Arduino and other microcontrollers accessible and fun for everyone. Our block-based interface allows you to create, compile, and upload code to your hardware seamlessly, empowering you to bring your creative projects to life.</p><p>This project is open source and built on the hard work of the Blockly and Arduino communities. We are grateful for their foundational contributions.</p>",
+  paypalModalLabel:"フリーソフトウェアを助けてください！",
+  paypalBody:"このソフトウェアの開発と改善に役立てるために寄付をしていただきありがとうございます。あなたなしでフリーソフトウェアは存続できません！" ,
   msg_ajax_ko:"AJAX requests are not supported by your browser, the following features\n"
 	+ "will not be operational : \n"
 	+ "- Load Blocks through url \n"
