@@ -153,10 +153,10 @@
 	<category name="CAT_VARIABLES" custom="VARIABLE" colour="#FF8C1A"></category>
 	<category name="CAT_FUNCTIONS" custom="PROCEDURE" colour="#FF6680"></category>
 	<sep></sep>
-	<category name="CAT_ARDUINO" colour="#00979D">
-		<block type="base_begin"></block>
+	<category name="CAT_ARDUINO" colour="#990099">
+	<!---	<block type="base_begin"></block> 
 		<block type="base_setup"></block>
-		<block type="base_loop"></block>
+		<block type="base_loop"></block> -->
 		<block type="base_setup_loop"></block>
 		<block type="base_define"></block>
 		<block type="base_define_bloc"></block>

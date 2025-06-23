@@ -114,7 +114,7 @@
 		<block type="mbot_turn_left"></block>	
 		<block type="mbot_turn_right"></block>	
 	</category>
-	<category name="CAT_ARDUINO" colour="#00979D">
+	<category name="CAT_ARDUINO" colour="#ffa500">
 		<block type="base_begin"></block>
 		<block type="base_setup_loop"></block>
 		<block type="base_define"></block>

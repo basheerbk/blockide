@@ -22,6 +22,7 @@ BlocklyDuino.inlineBool = true;
 BlocklyDuino.withImage = true;
 BlocklyDuino.ajaxOK = true;
 BlocklyDuino.toolboxInIndexHtml = false;
+BlocklyDuino.loadingDefaultBlocks = false;
 
 /**
  * Blockly's main workspace.
@@ -30,6 +31,110 @@ BlocklyDuino.toolboxInIndexHtml = false;
 BlocklyDuino.workspace = null;
 var BlocklyLevel = 'none';
 
+/**
+ * Custom workspaceToCode function that processes all top-level blocks, including those not connected to Arduino structure blocks.
+ * @param {Blockly.Workspace} workspace The workspace to generate code from.
+ * @return {string} Generated Arduino code.
+ */
+BlocklyDuino.workspaceToCode = function(workspace) {
+    if (!workspace) {
+        console.warn("No workspace specified in workspaceToCode call. Guessing.");
+        workspace = Blockly.getMainWorkspace();
+    }
+    
+    var code = [];
+    Blockly.Arduino.init(workspace);
+    
+    // Get all top-level blocks
+    var topBlocks = workspace.getTopBlocks(true);
+
+    // Helper: is this block a function definition?
+    function isFunctionDefinition(block) {
+        return block.type === 'procedures_defnoreturn' || block.type === 'procedures_defreturn';
+    }
+
+    // Helper: is this block connected to a root (setup/loop)?
+    function isConnectedToRoot(block) {
+        // Traverse upwards to see if this block is ultimately connected to a root
+        var current = block;
+        while (current) {
+            if (
+                current.type === 'base_setup_loop' ||
+                current.type === 'base_setup' ||
+                current.type === 'base_loop' ||
+                current.type === 'base_begin' ||
+                current.type === 'base_end' // add more root types if needed
+            ) {
+                return true;
+            }
+            current = current.getParent && current.getParent();
+        }
+        return false;
+    }
+
+    for (var i = 0; i < topBlocks.length; i++) {
+        var block = topBlocks[i];
+        if (isFunctionDefinition(block) || isConnectedToRoot(block)) {
+            var blockCode = Blockly.Arduino.blockToCode(block);
+            if (goog.isArray(blockCode)) {
+                blockCode = blockCode[0];
+            }
+            if (blockCode) {
+                if (block.outputConnection && Blockly.Arduino.scrubNakedValue) {
+                    blockCode = Blockly.Arduino.scrubNakedValue(blockCode);
+                }
+                code.push(blockCode);
+            }
+        }
+        // else: orphaned, skip
+    }
+    
+    var result = code.join('\n');
+    result = Blockly.Arduino.finish(result);
+    result = result.replace(/^\s+\n/, '');
+    result = result.replace(/\n\s+$/, '\n');
+    return result;
+};
+
+/**
+ * Helper function to get all blocks connected to a given block (recursively).
+ * @param {Blockly.Block} startBlock The starting block.
+ * @return {Array<Blockly.Block>} Array of all connected blocks.
+ */
+BlocklyDuino.getAllConnectedBlocks = function(startBlock) {
+    var connectedBlocks = [];
+    var visited = new Set();
+    
+    function traverseBlock(block) {
+        if (!block || visited.has(block.id)) {
+            return;
+        }
+        
+        visited.add(block.id);
+        connectedBlocks.push(block);
+        
+        // Check all inputs
+        for (var i = 0; i < block.inputList.length; i++) {
+            var input = block.inputList[i];
+            if (input.connection && input.connection.targetBlock()) {
+                traverseBlock(input.connection.targetBlock());
+            }
+        }
+        
+        // Check next statement
+        if (block.nextConnection && block.nextConnection.targetBlock()) {
+            traverseBlock(block.nextConnection.targetBlock());
+        }
+        
+        // Check previous statement
+        if (block.previousConnection && block.previousConnection.targetBlock()) {
+            traverseBlock(block.previousConnection.targetBlock());
+        }
+    }
+    
+    traverseBlock(startBlock);
+    return connectedBlocks;
+};
 
 /**
  * Populate the currently selected pane with content generated from the blocks.
@@ -61,7 +166,7 @@ BlocklyDuino.renderContent = function() {
                 $(".blocklyToolboxDiv").hide();
                 try {
                     var cardId = BlocklyDuino.getStringParamFromUrl('card', '');
-                    if (cardId != 'kit_microbit') $('#pre_Arduino').text(Blockly.Arduino.workspaceToCode(BlocklyDuino.workspace));
+                    if (cardId != 'kit_microbit') $('#pre_Arduino').text(BlocklyDuino.workspaceToCode(BlocklyDuino.workspace));
                     else $('#pre_Arduino').text(Blockly.Python.workspaceToCode(BlocklyDuino.workspace));
                     if (typeof prettyPrintOne == 'function') {
                         $('#pre_arduino').html(prettyPrintOne($('#pre_arduino').html(), 'cpp'));
@@ -92,8 +197,8 @@ BlocklyDuino.renderContent = function() {
 BlocklyDuino.renderArduinoCodePreview = function() {
     var cardId = BlocklyDuino.getStringParamFromUrl('card', '');
     if (cardId != 'kit_microbit') {
-        $('#pre_previewArduino').text(Blockly.Arduino.workspaceToCode(BlocklyDuino.workspace));
-        $('#pre_arduino').text(Blockly.Arduino.workspaceToCode(BlocklyDuino.workspace));
+        $('#pre_previewArduino').text(BlocklyDuino.workspaceToCode(BlocklyDuino.workspace));
+        $('#pre_arduino').text(BlocklyDuino.workspaceToCode(BlocklyDuino.workspace));
     } else {
         $('#pre_previewArduino').text(Blockly.Python.workspaceToCode(BlocklyDuino.workspace));
         $('#pre_arduino').text(Blockly.Python.workspaceToCode(BlocklyDuino.workspace));
@@ -217,44 +322,49 @@ BlocklyDuino.addReplaceParamToUrl = function(url, param, value) {
 
 /**
  * Load blocks saved on App Engine Storage or in session/local storage.
- * 
+ * This function is now responsible for deciding if the default blocks should be
+ * loaded.
  * @param {string}
- *            defaultXml Text representation of default blocks.
+ *            defaultXml Text representation of default blocks from a file.
  */
 BlocklyDuino.loadBlocks = function(defaultXml) {
+    var blocksLoadedFromFile = false;
     if (defaultXml) {
-        // Load the editor with default starting blocks.
+        // Load the editor with default starting blocks from a file.
         var xml = Blockly.Xml.textToDom(defaultXml);
-        Blockly.Xml.domToWorkspace(xml, BlocklyDuino.workspace);
-    } else {
-        var loadOnce = null;
-        try {
-            loadOnce = sessionStorage.getItem('loadOnceBlocks');
-        } catch (e) {
-            // Firefox sometimes throws a SecurityError when accessing
-            // localStorage.
-            // Restarting Firefox fixes this, so it looks like a bug.
-        }
-        if (loadOnce != null) {
-            // Language switching stores the blocks during the reload.
-            sessionStorage.removeItem('loadOnceBlocks');
-            var xml = Blockly.Xml.textToDom(loadOnce);
+        if (xml.getElementsByTagName('block').length > 0) {
             Blockly.Xml.domToWorkspace(xml, BlocklyDuino.workspace);
+            blocksLoadedFromFile = true;
         }
     }
-};
 
-/*
- *  Store the blocks for the duration of the reload.
- */
-BlocklyDuino.backupBlocks = function() {
-    if (typeof Blockly != 'undefined' && sessionStorage) {
-        var xml = Blockly.Xml.workspaceToDom(BlocklyDuino.workspace);
-        var text = Blockly.Xml.domToText(xml);
-        sessionStorage.setItem('loadOnceBlocks', text);
+    if (blocksLoadedFromFile) {
+        // Blocks were loaded from a file, so we are done.
+        return;
+    }
+
+    // No blocks from file, so check session storage.
+    var blocksLoadedFromSession = false;
+    var loadOnce = null;
+    try {
+        loadOnce = sessionStorage.getItem('loadOnceBlocks');
+    } catch (e) {
+        // Firefox sometimes throws a SecurityError when accessing localStorage.
+    }
+
+    if (loadOnce && loadOnce.indexOf('<block') > -1) {
+        // Session storage has blocks, so load them.
+        var xml = Blockly.Xml.textToDom(loadOnce);
+        Blockly.Xml.domToWorkspace(xml, BlocklyDuino.workspace);
+        blocksLoadedFromSession = true;
+    }
+
+    // If no blocks were loaded from a file or a populated session,
+    // load the default Arduino block.
+    if (!blocksLoadedFromFile && !blocksLoadedFromSession) {
+        BlocklyDuino.loadDefaultArduinoBlocks();
     }
 };
-
 
 /**
  * Sets Arduino card
@@ -1165,3 +1275,111 @@ BlocklyDuino.DialogCode_edit = function() {
     //$('#pre_previewArduino').addClass('hidden');
 
 }
+
+/*
+ *  Store the blocks for the duration of the reload.
+ */
+BlocklyDuino.backupBlocks = function() {
+    if (typeof Blockly != 'undefined' && sessionStorage) {
+        var xml = Blockly.Xml.workspaceToDom(BlocklyDuino.workspace);
+        var text = Blockly.Xml.domToText(xml);
+        sessionStorage.setItem('loadOnceBlocks', text);
+    }
+};
+
+/**
+ * Load default Arduino structure blocks (void setup and void loop)
+ * when the workspace is empty. This function is protected by a lock
+ * to prevent race conditions.
+ */
+BlocklyDuino.loadDefaultArduinoBlocks = function() {
+    // 1. Check lock to prevent this from running multiple times
+    if (BlocklyDuino.loadingDefaultBlocks) {
+        return;
+    }
+    // NEW GUARD: Prevent duplicate base_setup_loop blocks
+    if (
+        BlocklyDuino.workspace &&
+        BlocklyDuino.workspace.getAllBlocks(false).some(
+            function(block) { return block.type === 'base_setup_loop'; }
+        )
+    ) {
+        return;
+    }
+    // Set lock IMMEDIATELY to prevent race conditions
+    BlocklyDuino.loadingDefaultBlocks = true;
+    setTimeout(function() {
+        // 4. Final check: only load if the workspace is still empty
+        if (BlocklyDuino.workspace && BlocklyDuino.workspace.getAllBlocks(false).length === 0) {
+            
+            // Check if block type is available
+            if (!Blockly.Blocks['base_setup_loop']) {
+                console.error('Arduino base_setup_loop block not available.');
+                BlocklyDuino.loadingDefaultBlocks = false; // Release lock
+                return;
+            }
+            
+            console.log('Loading default Arduino blocks...');
+            
+            // Get workspace dimensions to center the blocks
+            var metrics = BlocklyDuino.workspace.getMetrics();
+            var centerX = Math.max(100, metrics.viewWidth / 2 - 100);
+            var centerY = Math.max(100, metrics.viewHeight / 2 - 100);
+            
+            // XML-first approach with a manual creation fallback
+            var success = false;
+            try {
+                var defaultXml = '<xml xmlns="https://developers.google.com/blockly/xml">' +
+                    '<block type="base_setup_loop" x="' + centerX + '" y="' + centerY + '"></block>' +
+                    '</xml>';
+                var xml = Blockly.Xml.textToDom(defaultXml);
+                var blockCount = Blockly.Xml.domToWorkspace(xml, BlocklyDuino.workspace);
+                success = blockCount > 0;
+            } catch (e) {
+                console.error('XML block creation failed, trying manual approach.', e);
+            }
+            
+            if (!success) {
+                try {
+                    var setupLoopBlock = BlocklyDuino.workspace.newBlock('base_setup_loop');
+                    setupLoopBlock.moveBy(centerX, centerY);
+                    setupLoopBlock.initSvg();
+                    setupLoopBlock.render();
+                    success = true;
+                } catch (e) {
+                    console.error('Manual block creation failed.', e);
+                }
+            }
+            
+            if (success) {
+                BlocklyDuino.workspace.render();
+                // Remove duplicate base_setup_loop blocks if any exist
+                var setupLoopBlocks = BlocklyDuino.workspace.getAllBlocks(false).filter(function(block) {
+                    return block.type === 'base_setup_loop';
+                });
+                if (setupLoopBlocks.length > 1) {
+                    // Keep the first, remove the rest
+                    for (var i = 1; i < setupLoopBlocks.length; i++) {
+                        setupLoopBlocks[i].dispose(false, true);
+                    }
+                }
+                // Center the view on the new block
+                setTimeout(function() {
+                    var topBlocks = BlocklyDuino.workspace.getTopBlocks(false);
+                    if (topBlocks.length > 0) {
+                        try {
+                           BlocklyDuino.workspace.centerOnBlock(topBlocks[0].id);
+                        } catch(e) {
+                           console.error("Error centering on block. It may already be visible.", e);
+                        }
+                    }
+                }, 50);
+                 if (typeof BlocklyDuino.renderContent === 'function') {
+                    BlocklyDuino.renderContent();
+                }
+            }
+        }
+        // 5. Release the lock once the operation is complete
+        BlocklyDuino.loadingDefaultBlocks = false;
+    }, 200);
+};

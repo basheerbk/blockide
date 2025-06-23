@@ -154,7 +154,7 @@
 	<sep></sep>
 	<category name="CAT_ARDUINO" colour="#00979D">
 		<block type="base_begin"></block>
-		<block type="base_setup"></block>
+		<block type="base_setup"></block>		
 		<block type="base_setup_loop"></block>
 		<block type="base_define"></block>
 		<block type="base_define_bloc"></block>

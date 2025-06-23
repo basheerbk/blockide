@@ -1,0 +1,98 @@
+!DOCTYPE html>
+<html>
+<head>
+    <title>Default Arduino Blocks Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        .warning { background-color: #fff3cd; border-color: #ffeaa7; }
+    </style>
+</head>
+<body>
+    <h1>Default Arduino Blocks Test</h1>
+    
+    <div class="test-section success">
+        <h3>✅ Default Arduino Blocks Implementation</h3>
+        <p><strong>Feature:</strong> Automatically load void setup() and void loop() blocks when workspace is empty</p>
+        <p><strong>Implementation:</strong> Modified <code>loadBlocks()</code> function in <code>core/BlocklyArduino/blockly@rduino_core_Electron.js</code></p>
+    </div>
+    
+    <div class="test-section warning">
+        <h3>🔧 Visual Loading Issue - FIXED</h3>
+        <p><strong>Problem:</strong> Blocks were being loaded but not appearing visually in the workspace</p>
+        <p><strong>Root Cause:</strong> Timing issues with workspace initialization and block positioning</p>
+        <p><strong>Solution:</strong> Implemented multiple approaches with fallbacks:</p>
+        <ul>
+            <li><strong>Timing Fix:</strong> Increased delay to 200ms to ensure workspace is fully ready</li>
+            <li><strong>Positioning Fix:</strong> Calculate workspace center and position blocks there</li>
+            <li><strong>Rendering Fix:</strong> Force workspace render and center view on blocks</li>
+            <li><strong>Fallback Method:</strong> Manual block creation if XML approach fails</li>
+            <li><strong>Debugging:</strong> Added comprehensive console logging</li>
+        </ul>
+    </div>
+    
+    <div class="test-section info">
+        <h3>📋 How It Works</h3>
+        <ol>
+            <li>When Blockly@rduino initializes, it calls <code>loadBlocks()</code></li>
+            <li>If no blocks are loaded from session storage or URL parameters</li>
+            <li>The new <code>loadDefaultArduinoBlocks()</code> function is called</li>
+            <li>Function waits 200ms to ensure workspace is fully initialized</li>
+            <li>Calculates workspace center for optimal block positioning</li>
+            <li>Tries XML approach first, falls back to manual block creation</li>
+            <li>Forces workspace render and centers view on the new blocks</li>
+            <li>Triggers content render to update code preview</li>
+        </ol>
+    </div>
+    
+    <div class="test-section info">
+        <h3>🔧 Code Changes Made</h3>
+        <ul>
+            <li><strong>Modified <code>loadBlocks()</code>:</strong> Added else clause to call <code>loadDefaultArduinoBlocks()</code> when no existing blocks</li>
+            <li><strong>Added <code>loadDefaultArduinoBlocks()</code>:</strong> Robust function with multiple fallback approaches</li>
+            <li><strong>Block Types Used:</strong> <code>base_setup</code> and <code>base_loop</code> (already defined in arduino_base.js)</li>
+            <li><strong>Positioning:</strong> Blocks positioned at workspace center for visibility</li>
+            <li><strong>Error Handling:</strong> Comprehensive try-catch blocks and debugging</li>
+        </ul>
+    </div>
+    
+    <div class="test-section success">
+        <h3>✅ Benefits</h3>
+        <ul>
+            <li>Users no longer need to manually drag void setup() and void loop() blocks</li>
+            <li>Every new project starts with proper Arduino structure</li>
+            <li>Prevents orphaned blocks issue (blocks outside setup/loop)</li>
+            <li>Improves user experience for beginners</li>
+            <li>Blocks are positioned in the center of the workspace for immediate visibility</li>
+            <li>Robust implementation with multiple fallback methods</li>
+        </ul>
+    </div>
+    
+    <div class="test-section info">
+        <h3>🧪 Testing</h3>
+        <p>To test this feature:</p>
+        <ol>
+            <li>Open Blockly@rduino in a fresh browser session (or clear session storage)</li>
+            <li>Open browser console to see debug messages</li>
+            <li>Verify that void setup() and void loop() blocks appear automatically in the center</li>
+            <li>Check that code generation works correctly with these default blocks</li>
+            <li>Confirm that blocks placed inside setup/loop generate proper Arduino code</li>
+            <li>Look for console messages indicating successful block loading</li>
+        </ol>
+    </div>
+    
+    <div class="test-section info">
+        <h3>🐛 Debugging</h3>
+        <p>If blocks still don't appear, check the browser console for:</p>
+        <ul>
+            <li>"Loading default Arduino blocks..." - Function is being called</li>
+            <li>"XML approach successful" or "Manual block creation successful" - Block creation method</li>
+            <li>"Blocks positioned at center: X, Y" - Block positioning</li>
+            <li>"Total blocks in workspace: 2" - Confirmation of block count</li>
+            <li>Any error messages indicating what went wrong</li>
+        </ul>
+    </div>
+</body>
+</html> 
